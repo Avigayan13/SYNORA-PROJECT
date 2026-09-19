@@ -1,4 +1,321 @@
 /* ═══════════════════════════════════════════════════════
+   SYNORA / THE BIIIID — STRICT BLACK & WHITE LUXURY THEME
+   Pure Monochromatic Minimalist Digital Auction Platform
+═══════════════════════════════════════════════════════ */
+
+:root {
+  /* Pure Black & White Palette */
+  --bg-base:      #000000;
+  --bg-surface:   #09090b;
+  --bg-card:      rgba(14, 14, 18, 0.90);
+  --bg-card-alt:  rgba(24, 24, 30, 0.75);
+  --bg-input:     rgba(12, 12, 16, 0.95);
+  --bg-glass:     rgba(255, 255, 255, 0.04);
+
+  /* Hairline Monochrome Borders */
+  --border:       rgba(255, 255, 255, 0.12);
+  --border-light: rgba(255, 255, 255, 0.06);
+  --border-dark:  rgba(255, 255, 255, 0.24);
+  --border-focus: #ffffff;
+  --border-glow:  rgba(255, 255, 255, 0.35);
+
+  /* Strict Monochrome Accents (All Whites & Grays) */
+  --white:        #ffffff;
+  --off-white:    #f4f4f5;
+  --gray-100:     #e4e4e7;
+  --gray-200:     #d4d4d8;
+  --gray-300:     #a1a1aa;
+  --gray-400:     #71717a;
+  --gray-500:     #52525b;
+  --gray-600:     #3f3f46;
+  --gray-700:     #27272a;
+  --gray-800:     #18181b;
+  --gray-900:     #09090b;
+
+  /* Color Variable Overrides to Monochrome */
+  --emerald:      #ffffff;
+  --emerald-dk:   #d4d4d8;
+  --emerald-muted: rgba(255, 255, 255, 0.12);
+  --rose:         #ffffff;
+  --rose-muted:   rgba(255, 255, 255, 0.12);
+  --amber:        #ffffff;
+  --amber-muted:  rgba(255, 255, 255, 0.12);
+  --cyan:         #ffffff;
+  --cyan-lt:      #f4f4f5;
+  --cyan-dk:      #a1a1aa;
+  --blue:         #ffffff;
+  --blue-dk:      #a1a1aa;
+  --purple:       #ffffff;
+  --pink:         #ffffff;
+  --magenta:      #ffffff;
+
+  /* Typography */
+  --text-hi:      #ffffff;
+  --text-mid:     #a1a1aa;
+  --text-lo:      #71717a;
+
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+  --font-serif:   'Space Grotesk', 'Outfit', sans-serif;
+  --font-display: 'Cinzel', serif;
+
+  /* Radii */
+  --r-sm:   4px;
+  --r-md:   8px;
+  --r-lg:   14px;
+  --r-xl:   20px;
+  --r-full: 9999px;
+
+  /* Shadows */
+  --shadow-card:       0 10px 30px -5px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --shadow-card-hover: 0 20px 45px -10px rgba(0, 0, 0, 0.98), 0 0 35px rgba(255, 255, 255, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  --shadow-glow-cyan:    0 0 20px rgba(255, 255, 255, 0.25);
+  --shadow-glow-emerald: 0 0 20px rgba(255, 255, 255, 0.25);
+  --shadow-magenta-glow: 0 0 25px rgba(255, 255, 255, 0.25);
+  --shadow-cyan-glow:    0 0 25px rgba(255, 255, 255, 0.25);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: #000000 !important;
+  color: #ffffff !important;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Subtle Film Grain ── */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 0);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.5;
+}
+
+/* ── Header ── */
+header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(0, 0, 0, 0.92) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.brand-biiiid {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: #ffffff !important;
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4) !important;
+}
+
+.brand-chip {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.brand-sub {
+  color: var(--gray-400) !important;
+}
+
+/* ── Navigation Tabs ── */
+.nav-tab {
+  color: var(--gray-400) !important;
+  border: 1px solid transparent !important;
+}
+.nav-tab:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+.nav-tab.active {
+  color: #000000 !important;
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3) !important;
+  font-weight: 800 !important;
+}
+.nav-tab.active span {
+  color: #000000 !important;
+}
+
+.nav-tab-badge {
+  background: rgba(0, 0, 0, 0.2) !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ── Monochrome Headline ── */
+.gradient-headline {
+  background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.35)) !important;
+}
+
+.web3-hero-pill {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.btn-cta-explore {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #ffffff !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.35) !important;
+}
+.btn-cta-explore:hover {
+  background: #e4e4e7 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.6) !important;
+}
+
+.btn-cta-sell {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+.btn-cta-sell:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: #ffffff !important;
+}
+
+/* ── Monochrome Strategy Cards ── */
+.strategy-card {
+  background: var(--bg-card) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+.strategy-card:hover {
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: var(--shadow-card-hover) !important;
+}
+.strategy-card.selected {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.25) !important;
+}
+
+.sc-badge-rose, .sc-badge-amber, .sc-badge-blue, .sc-badge-emerald, .sc-badge {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+.pulse-dot {
+  background: #ffffff !important;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8) !important;
+}
+
+/* ── Monochrome Live Cards ── */
+.live-lot-card, .neon-3d-card, .step-card, .seller-card, .bidding-console-card, .lot-hero-card, .stream-card, .telemetry-card, .burst-card, .spec-card {
+  background: rgba(14, 14, 18, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: var(--shadow-card) !important;
+}
+.live-lot-card:hover, .neon-3d-card:hover, .seller-card:hover {
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  box-shadow: var(--shadow-card-hover) !important;
+}
+
+.lot-img-wrap {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(10, 10, 12, 0.95) 70%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.lot-timer-chip {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-place-bid-action, .btn-primary, .btn-hero-quick-bid {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #ffffff !important;
+  font-weight: 800 !important;
+}
+.btn-place-bid-action:hover, .btn-primary:hover, .btn-hero-quick-bid:hover {
+  background: #e4e4e7 !important;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.5) !important;
+}
+
+.btn-increment {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+}
+.btn-increment:hover {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+}
+
+.grand-price-box {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+.grand-price-amount {
+  color: #ffffff !important;
+}
+
+.bidder-passport-card {
+  background: rgba(0, 0, 0, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.bp-row .bp-label {
+  color: var(--gray-400) !important;
+}
+.bp-row .bp-val {
+  color: #ffffff !important;
+}
+
+/* ── Ticker Tape ── */
+.ticker-marquee-wrap {
+  background: #000000 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+/* ── 3D Rings & Ambient Glow (Monochrome) ── */
+.ring-outer, .ring-middle, .ring-inner {
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15) !important;
+}
+.hero-3d-ambient-glow {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%) !important;
+}
+.hero-3d-gem, .hero-3d-gavel {
+  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.7)) !important;
+}
+
+/* ── Final CTA Banner ── */
+.final-cta-banner {
+  background: rgba(18, 18, 22, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.1) !important;
+}
+
+
+/* ═══════════════════════════════════════════════════════
    SYNORA / THE BIIIID — High-End Monochrome 3D Auction House
    Pure Black, Charcoal & Architectural Minimalism
 ═══════════════════════════════════════════════════════ */

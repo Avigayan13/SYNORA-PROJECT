@@ -528,6 +528,18 @@ function App() {
   const [activeTab, setActiveTab] = useState('landing');
   // Audio & Intro Experience State
   const [isSoundMuted, setIsSoundMuted] = useState(() => localStorage.getItem('synora_sound_muted') === 'true');
+
+  // Global Click Sound Effect on EVERY interaction
+  useEffect(() => {
+    const handleGlobalClick = (e) => {
+      // Play tactile click on every user interaction anywhere on the site
+      SoundFX.softClick(isSoundMuted);
+    };
+    window.addEventListener('click', handleGlobalClick, true);
+    return () => {
+      window.removeEventListener('click', handleGlobalClick, true);
+    };
+  }, [isSoundMuted]);
   const [showIntro, setShowIntro] = useState(() => sessionStorage.getItem('synora_intro_seen') !== 'true');
   const [watchlist, setWatchlist] = useState(['SYN-9024', 'SYN-8840']);
   const [isWatchlistModalOpen, setIsWatchlistModalOpen] = useState(false);
