@@ -3741,7 +3741,10 @@ function App() {
 }
 
 // Mount React Root
-const rootElement = document.getElementById('root');
-if (rootElement) {
-  ReactDOM.createRoot(rootElement).render(<App />);
-}
+(function() {
+  const mountNode = document.getElementById('root');
+  if (mountNode) {
+    const root = ReactDOM.createRoot(mountNode);
+    root.render(<App />);
+  }
+})();

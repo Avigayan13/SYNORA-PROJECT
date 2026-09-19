@@ -6,7 +6,7 @@
   <title>THE BIIIID | FROM SYNORA — Real-Time Auction &amp; Concurrency Lab</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   
-  <!-- Cool Typography & Monospace Fonts -->
+  <!-- Typography & Monospace Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@700;800;900&family=Space+Grotesk:wght@700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
@@ -3770,16 +3770,14 @@ function App() {
 }
 
 // Mount React Root
-const rootElement = document.getElementById('root');
-if (rootElement) {
-  ReactDOM.createRoot(rootElement).render(<App />);
-}
+(function() {
+  const mountNode = document.getElementById('root');
+  if (mountNode) {
+    const root = ReactDOM.createRoot(mountNode);
+    root.render(<App />);
+  }
+})();
 
-// Mount React Root
-const rootElement = document.getElementById('root');
-if (rootElement) {
-  ReactDOM.createRoot(rootElement).render(<App />);
-}
-</script>
+  </script>
 </body>
 </html>
