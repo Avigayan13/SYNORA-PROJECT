@@ -1891,367 +1891,416 @@ function App() {
                   {/* ═══════════════════════════════════════════════════════════════
           FUTURISTIC WEB3 LANDING PAGE: "BID FAST. WIN RARE."
       ═══════════════════════════════════════════════════════════════ */}
+            {/* ═══════════════════════════════════════════════════════════════
+          VIEW 0: FULL-PAGE 3D INTERACTIVE PLATFORM HUB
+      ═══════════════════════════════════════════════════════════════ */}
       {activeTab === 'landing' && (
-        <div className="web3-landing-wrap">
-          
-          {/* 1. Centered Hero Section */}
-          <section className="web3-hero-section">
-            <div className="web3-hero-pill">
-              <span className="pulse-dot" style={{ background: 'var(--pink)' }}></span>
-              <span>HIGH-FREQUENCY WEB3 AUCTION ARCHITECTURE</span>
-            </div>
+        <div 
+          className="hub-3d-fullpage-wrapper"
+          onMouseMove={(e) => {
+            const spotlight = document.getElementById('hub-spotlight');
+            const grid = document.getElementById('hub-grid');
+            if (spotlight) {
+              spotlight.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+            }
+            if (grid) {
+              const xRatio = (e.clientX / window.innerWidth - 0.5) * 15;
+              const yRatio = (e.clientY / window.innerHeight - 0.5) * 10;
+              grid.style.transform = `rotateX(${75 + yRatio}deg) rotateZ(${-xRatio}deg) translateZ(-60px)`;
+            }
+          }}
+        >
+          {/* Spatial 3D Ambient Environment */}
+          <div className="hub-3d-particles" />
+          <div id="hub-grid" className="hub-3d-floor-grid" />
+          <div id="hub-spotlight" className="hub-3d-spotlight" />
 
-            <h1 className="web3-headline">
-              Bid Fast. <span className="gradient-headline">Win Rare.</span>
-            </h1>
+          <div className="web3-landing-wrap">
+            
+            {/* 1. Centered Hero Section with Interactive 3D Artifact */}
+            <section className="web3-hero-section">
+              <div className="web3-hero-pill">
+                <span className="pulse-dot"></span>
+                <span>HIGH-FREQUENCY MONOCHROME AUCTION PLATFORM</span>
+              </div>
 
-            <p className="web3-hero-copy">
-              The world's premier high-concurrency digital auction platform. Powered by an atomic in-memory single-writer sequencer executing at 5,000+ TPS with sub-millisecond linearizable guarantees.
-            </p>
+              <h1 className="web3-headline">
+                Bid Fast. <span className="gradient-headline">Win Rare.</span>
+              </h1>
 
-            <div className="web3-hero-ctas">
-              <button className="btn-cta-explore" onClick={() => setActiveTab('auction')}>
-                <span>Explore Auctions →</span>
-              </button>
-              <button className="btn-cta-sell" onClick={() => setActiveTab('concurrency')}>
-                <span>⚡ 5,000 TPS Lab</span>
-              </button>
-              <button className="btn-cta-sell" onClick={() => setActiveTab('relief')} style={{ borderColor: 'rgba(16, 185, 129, 0.4)', color: '#34d399' }}>
-                <span>🚑 Relief Exchange</span>
-              </button>
-            </div>
+              <p className="web3-hero-copy">
+                The world's premier high-concurrency digital auction house. Powered by an atomic in-memory single-writer sequencer executing at 5,000+ TPS with sub-millisecond linearizable guarantees.
+              </p>
 
-            {/* Interactive 3D Hero Centerpiece */}
-            <Hero3DComposition
-              currentPrice={currentPrice}
-              highestBidder={highestBidder}
-              timeLeftSec={timeLeftSec}
-              formattedTimer={formattedTimer}
-              onExplore={() => setActiveTab('auction')}
-              onBid={() => setActiveTab('auction')}
-            />
-          </section>
+              <div className="web3-hero-ctas">
+                <button className="btn-cta-explore" onClick={() => { setActiveTab('auction'); SoundFX.softClick(isSoundMuted); }}>
+                  <span>Explore Live Floor →</span>
+                </button>
+                <button className="btn-cta-sell" onClick={() => { setActiveTab('concurrency'); SoundFX.softClick(isSoundMuted); }}>
+                  <span>⚡ 5,000 TPS Lab</span>
+                </button>
+                <button className="btn-cta-sell" onClick={() => { setActiveTab('relief'); SoundFX.softClick(isSoundMuted); }}>
+                  <span>🚑 Relief Exchange</span>
+                </button>
+              </div>
 
-          {/* 2. Large Neon 3D Hero Composition (Electric Lighting) */}
-          <section className="web3-neon-3d-grid">
-            <div className="neon-3d-card neon-card-blue">
-              <span className="neon-visual-icon">💎</span>
-              <span className="sc-badge sc-badge-blue">GENESIS #01</span>
-              <h3 className="neon-card-title">Rare Collectibles</h3>
-              <p className="neon-card-desc">Deterministic provenance and physical asset vault tokens secured by cryptographic hash chains.</p>
-            </div>
+              {/* Interactive 3D Hero Centerpiece */}
+              <Hero3DComposition
+                currentPrice={currentPrice}
+                highestBidder={highestBidder}
+                timeLeftSec={timeLeftSec}
+                formattedTimer={formattedTimer}
+                onExplore={() => { setActiveTab('auction'); SoundFX.softClick(isSoundMuted); }}
+                onBid={() => { setActiveTab('auction'); SoundFX.softClick(isSoundMuted); }}
+              />
+            </section>
 
-            <div className="neon-3d-card neon-card-purple">
-              <span className="neon-visual-icon">⌚</span>
-              <span className="sc-badge sc-badge-purple" style={{ background: 'rgba(168,85,247,0.2)', color: '#c084fc', borderColor: 'rgba(168,85,247,0.4)' }}>HAUTE HORLOGERIE</span>
-              <h3 className="neon-card-title">Luxury Watches</h3>
-              <p className="neon-card-desc">Rare limited-edition tourbillons and chronometers with verified physical escrow custody.</p>
-            </div>
+            {/* 2. 3D Category Bento Showcase */}
+            <section className="web3-neon-3d-grid">
+              <div className="neon-3d-card card-3d-layer" onClick={() => { setActiveTab('auction'); SoundFX.softClick(isSoundMuted); }} style={{ cursor: 'pointer' }}>
+                <span className="neon-visual-icon lot-3d-glyph">💎</span>
+                <span className="sc-badge">GENESIS ARCHIVE</span>
+                <h3 className="neon-card-title">Rare Collectibles</h3>
+                <p className="neon-card-desc">Deterministic provenance and physical asset vault tokens secured by cryptographic hash chains.</p>
+              </div>
 
-            <div className="neon-3d-card neon-card-pink">
-              <span className="neon-visual-icon">🌌</span>
-              <span className="sc-badge sc-badge-rose">GENERATIVE ART</span>
-              <h3 className="neon-card-title">Digital Art</h3>
-              <p className="neon-card-desc">Master archive generative digital tokens with verified historical transaction pedigree.</p>
-            </div>
+              <div className="neon-3d-card card-3d-layer" onClick={() => { setActiveTab('auction'); SoundFX.softClick(isSoundMuted); }} style={{ cursor: 'pointer' }}>
+                <span className="neon-visual-icon lot-3d-glyph">⌚</span>
+                <span className="sc-badge">HAUTE HORLOGERIE</span>
+                <h3 className="neon-card-title">Luxury Watches</h3>
+                <p className="neon-card-desc">Rare limited-edition tourbillons and chronometers with verified physical escrow custody.</p>
+              </div>
 
-            <div className="neon-3d-card neon-card-cyan">
-              <span className="neon-visual-icon">🔨</span>
-              <span className="sc-badge sc-badge-emerald">SUB-MS INGEST</span>
-              <h3 className="neon-card-title">Auction Paddles</h3>
-              <p className="neon-card-desc">Zero-lock single-writer auction sequencer handling thousands of simultaneous bids per second.</p>
-            </div>
-          </section>
+              <div className="neon-3d-card card-3d-layer" onClick={() => { setActiveTab('auction'); SoundFX.softClick(isSoundMuted); }} style={{ cursor: 'pointer' }}>
+                <span className="neon-visual-icon lot-3d-glyph">🌌</span>
+                <span className="sc-badge">GENERATIVE DIGITAL</span>
+                <h3 className="neon-card-title">Digital Art</h3>
+                <p className="neon-card-desc">Master archive generative digital tokens with verified historical transaction pedigree.</p>
+              </div>
 
-          {/* 3. Live Auctions Section */}
-          <section>
-            <div className="web3-section-title-wrap">
-              <span className="web3-section-badge">● LIVE IN PROGRESS</span>
-              <h2 className="web3-section-heading">Live Auctions</h2>
-              <p style={{ color: 'var(--text-mid)', fontSize: '0.9rem' }}>Real-time streaming lots available for instant bidding</p>
-            </div>
+              <div className="neon-3d-card card-3d-layer" onClick={() => { setActiveTab('concurrency'); SoundFX.softClick(isSoundMuted); }} style={{ cursor: 'pointer' }}>
+                <span className="neon-visual-icon lot-3d-glyph">⚡</span>
+                <span className="sc-badge">SUB-MS INGEST</span>
+                <h3 className="neon-card-title">Atomic Sequencer</h3>
+                <p className="neon-card-desc">Zero-lock single-writer auction sequencer handling thousands of simultaneous bids per second.</p>
+              </div>
+            </section>
 
-            {/* Search & Category Filter Bar */}
-            <div className="auction-filter-bar">
-              <div className="search-input-wrap">
-                <span className="search-icon">🔍</span>
-                <input
-                  type="text"
-                  className="search-input"
-                  placeholder="Search by lot title, ID, or curator..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  aria-label="Search lots"
-                />
-                {searchQuery && (
-                  <button className="btn-clear-search" onClick={() => setSearchQuery('')}>✕</button>
+            {/* 3. Live & Upcoming Auctions Grid */}
+            <section>
+              <div className="web3-section-title-wrap">
+                <span className="web3-section-badge">● LIVE IN PROGRESS</span>
+                <h2 className="web3-section-heading">Live Auctions</h2>
+                <p style={{ color: 'var(--text-mid)', fontSize: '0.9rem' }}>Real-time streaming lots available for instant bidding</p>
+              </div>
+
+              {/* Search & Category Filter Bar */}
+              <div className="auction-filter-bar">
+                <div className="search-input-wrap">
+                  <span className="search-icon">🔍</span>
+                  <input
+                    type="text"
+                    className="search-input"
+                    placeholder="Search by lot title, ID, or curator..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    aria-label="Search lots"
+                  />
+                  {searchQuery && (
+                    <button className="btn-clear-search" onClick={() => setSearchQuery('')}>✕</button>
+                  )}
+                </div>
+
+                <div className="filter-pill-group">
+                  <button
+                    className={`filter-pill ${categoryFilter === 'all' ? 'active' : ''}`}
+                    onClick={() => { setCategoryFilter('all'); SoundFX.softClick(isSoundMuted); }}
+                  >
+                    All Lots
+                  </button>
+                  <button
+                    className={`filter-pill ${categoryFilter === 'art' ? 'active' : ''}`}
+                    onClick={() => { setCategoryFilter('art'); SoundFX.softClick(isSoundMuted); }}
+                  >
+                    Fine Art &amp; Tokens
+                  </button>
+                  <button
+                    className={`filter-pill ${categoryFilter === 'watches' ? 'active' : ''}`}
+                    onClick={() => { setCategoryFilter('watches'); SoundFX.softClick(isSoundMuted); }}
+                  >
+                    Watches
+                  </button>
+                  <button
+                    className={`filter-pill ${categoryFilter === 'relief' ? 'active' : ''}`}
+                    onClick={() => { setCategoryFilter('relief'); SoundFX.softClick(isSoundMuted); }}
+                  >
+                    Relief Exchange
+                  </button>
+                </div>
+              </div>
+
+              <div className="live-auction-cards-grid">
+                {/* Live Lot 1: Genesis Token */}
+                {(categoryFilter === 'all' || categoryFilter === 'art') && (
+                  <div className="live-lot-card card-3d-layer">
+                    <div className="lot-img-wrap">
+                      <span className="lot-3d-glyph">💎</span>
+                      <span className="lot-timer-chip mono">⏳ {formattedTimer}</span>
+                      <button 
+                        className="btn-bookmark-card"
+                        onClick={(e) => { e.stopPropagation(); toggleWatchlist('SYN-9024'); }}
+                        title="Bookmark lot"
+                        style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(0,0,0,0.7)', border: '1px solid var(--border)', color: watchlist.includes('SYN-9024') ? '#ffffff' : 'var(--gray-500)', borderRadius: 'var(--r-full)', width: 32, height: 32, cursor: 'pointer' }}
+                      >
+                        {watchlist.includes('SYN-9024') ? '★' : '☆'}
+                      </button>
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.2rem' }}>
+                        <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff' }}>Rare Genesis Art Token #01</h3>
+                        <span className="mono text-xs text-lo">#SYN-9024</span>
+                      </div>
+                      <span className="text-muted text-xs">Genesis Treasury Vault &bull; 14 Bidders Active</span>
+                    </div>
+                    <div className="lot-bid-row">
+                      <div>
+                        <span className="text-lo text-xs" style={{ display: 'block' }}>CURRENT HIGH BID</span>
+                        <strong className="mono" style={{ fontSize: '1.4rem', color: '#ffffff' }}>${currentPrice.toLocaleString()}</strong>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <span className="text-lo text-xs" style={{ display: 'block' }}>HELD BY</span>
+                        <strong style={{ fontSize: '0.88rem', color: '#fff' }}>{highestBidder}</strong>
+                      </div>
+                    </div>
+                    <button className="btn-place-bid-action" onClick={() => { setActiveTab('auction'); SoundFX.softClick(isSoundMuted); }}>
+                      Enter Live Floor →
+                    </button>
+                  </div>
+                )}
+
+                {/* Live Lot 2: Chrono-Quantum Tourbillon */}
+                {(categoryFilter === 'all' || categoryFilter === 'watches') && (
+                  <div className="live-lot-card card-3d-layer">
+                    <div className="lot-img-wrap">
+                      <span className="lot-3d-glyph">⌚</span>
+                      <span className="lot-timer-chip mono">⏳ 01h 14m 20s</span>
+                      <button 
+                        className="btn-bookmark-card"
+                        onClick={(e) => { e.stopPropagation(); toggleWatchlist('SYN-8840'); }}
+                        title="Bookmark lot"
+                        style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(0,0,0,0.7)', border: '1px solid var(--border)', color: watchlist.includes('SYN-8840') ? '#ffffff' : 'var(--gray-500)', borderRadius: 'var(--r-full)', width: 32, height: 32, cursor: 'pointer' }}
+                      >
+                        {watchlist.includes('SYN-8840') ? '★' : '☆'}
+                      </button>
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.2rem' }}>
+                        <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff' }}>Chrono-Quantum Tourbillon</h3>
+                        <span className="mono text-xs text-lo">#SYN-8840</span>
+                      </div>
+                      <span className="text-muted text-xs">Geneva Master Horlogerie &bull; 28 Bidders Active</span>
+                    </div>
+                    <div className="lot-bid-row">
+                      <div>
+                        <span className="text-lo text-xs" style={{ display: 'block' }}>CURRENT HIGH BID</span>
+                        <strong className="mono" style={{ fontSize: '1.4rem', color: '#ffffff' }}>$48,500</strong>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <span className="text-lo text-xs" style={{ display: 'block' }}>HELD BY</span>
+                        <strong style={{ fontSize: '0.88rem', color: '#fff' }}>OmegaCapital#1</strong>
+                      </div>
+                    </div>
+                    <button className="btn-place-bid-action" onClick={() => { setActiveTab('auction'); SoundFX.softClick(isSoundMuted); }}>
+                      Enter Live Floor →
+                    </button>
+                  </div>
+                )}
+
+                {/* Live Lot 3: Relief Exchange Innovation */}
+                {(categoryFilter === 'all' || categoryFilter === 'relief') && (
+                  <div className="live-lot-card card-3d-layer">
+                    <div className="lot-img-wrap">
+                      <span className="lot-3d-glyph">🚑</span>
+                      <span className="lot-timer-chip mono">⏳ {formattedReliefTimer}</span>
+                      <button 
+                        className="btn-bookmark-card"
+                        onClick={(e) => { e.stopPropagation(); toggleWatchlist('REL-2026'); }}
+                        title="Bookmark lot"
+                        style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(0,0,0,0.7)', border: '1px solid var(--border)', color: watchlist.includes('REL-2026') ? '#ffffff' : 'var(--gray-500)', borderRadius: 'var(--r-full)', width: 32, height: 32, cursor: 'pointer' }}
+                      >
+                        {watchlist.includes('REL-2026') ? '★' : '☆'}
+                      </button>
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.2rem' }}>
+                        <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff' }}>Emergency Oxygen Procurement</h3>
+                        <span className="mono text-xs" style={{ color: 'var(--gray-400)' }}>#REL-2026</span>
+                      </div>
+                      <span className="text-muted text-xs">City Emergency Hospital &bull; 500 Cylinders</span>
+                    </div>
+                    <div className="lot-bid-row">
+                      <div>
+                        <span className="text-lo text-xs" style={{ display: 'block' }}>LEADING SUPPLIER COST</span>
+                        <strong className="mono" style={{ fontSize: '1.4rem', color: '#ffffff' }}>{formatINR(bestReliefOffer ? bestReliefOffer.totalCost : 960000)}</strong>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <span className="text-lo text-xs" style={{ display: 'block' }}>WINNING SUPPLIER</span>
+                        <strong style={{ fontSize: '0.88rem', color: '#fff' }}>{bestReliefOffer ? bestReliefOffer.supplier.split(' ')[0] : 'Apex'}</strong>
+                      </div>
+                    </div>
+                    <button className="btn-place-bid-action" onClick={() => { setActiveTab('relief'); SoundFX.softClick(isSoundMuted); }}>
+                      Submit Supplier Offer →
+                    </button>
+                  </div>
+                )}
+
+                {/* Live Lot 4: Cyber-Samurai Artifact */}
+                {(categoryFilter === 'all' || categoryFilter === 'art') && (
+                  <div className="live-lot-card card-3d-layer">
+                    <div className="lot-img-wrap">
+                      <span className="lot-3d-glyph">🌌</span>
+                      <span className="lot-timer-chip mono">⏳ 02h 45m 10s</span>
+                      <button 
+                        className="btn-bookmark-card"
+                        onClick={(e) => { e.stopPropagation(); toggleWatchlist('SYN-7721'); }}
+                        title="Bookmark lot"
+                        style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(0,0,0,0.7)', border: '1px solid var(--border)', color: watchlist.includes('SYN-7721') ? '#ffffff' : 'var(--gray-500)', borderRadius: 'var(--r-full)', width: 32, height: 32, cursor: 'pointer' }}
+                      >
+                        {watchlist.includes('SYN-7721') ? '★' : '☆'}
+                      </button>
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.2rem' }}>
+                        <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff' }}>Neo-Tokyo Cyber Artifact</h3>
+                        <span className="mono text-xs text-lo">#SYN-7721</span>
+                      </div>
+                      <span className="text-muted text-xs">Generative Cyberpunk Archive &bull; 19 Bidders Active</span>
+                    </div>
+                    <div className="lot-bid-row">
+                      <div>
+                        <span className="text-lo text-xs" style={{ display: 'block' }}>CURRENT HIGH BID</span>
+                        <strong className="mono" style={{ fontSize: '1.4rem', color: '#ffffff' }}>$12,800</strong>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <span className="text-lo text-xs" style={{ display: 'block' }}>HELD BY</span>
+                        <strong style={{ fontSize: '0.88rem', color: '#fff' }}>FlashBid-AI</strong>
+                      </div>
+                    </div>
+                    <button className="btn-place-bid-action" onClick={() => { setActiveTab('auction'); SoundFX.softClick(isSoundMuted); }}>
+                      Enter Live Floor →
+                    </button>
+                  </div>
                 )}
               </div>
+            </section>
 
-              <div className="filter-pill-group">
-                <button
-                  className={`filter-pill ${categoryFilter === 'all' ? 'active' : ''}`}
-                  onClick={() => { setCategoryFilter('all'); SoundFX.softClick(isSoundMuted); }}
-                >
-                  All Lots
-                </button>
-                <button
-                  className={`filter-pill ${categoryFilter === 'art' ? 'active' : ''}`}
-                  onClick={() => { setCategoryFilter('art'); SoundFX.softClick(isSoundMuted); }}
-                >
-                  Fine Art &amp; Tokens
-                </button>
-                <button
-                  className={`filter-pill ${categoryFilter === 'watches' ? 'active' : ''}`}
-                  onClick={() => { setCategoryFilter('watches'); SoundFX.softClick(isSoundMuted); }}
-                >
-                  Watches
-                </button>
-                <button
-                  className={`filter-pill ${categoryFilter === 'relief' ? 'active' : ''}`}
-                  onClick={() => { setCategoryFilter('relief'); SoundFX.softClick(isSoundMuted); }}
-                >
-                  Relief Exchange
-                </button>
+            {/* 4. How It Works (Monochrome Architectural Pipeline) */}
+            <section>
+              <div className="web3-section-title-wrap">
+                <span className="web3-section-badge">UNDER THE HOOD</span>
+                <h2 className="web3-section-heading">How It Works</h2>
+                <p style={{ color: 'var(--text-mid)', fontSize: '0.9rem' }}>Deterministic execution with zero race condition conflicts</p>
               </div>
-            </div>
 
+              <div className="how-it-works-grid">
+                <div className="step-card card-3d-layer">
+                  <span className="step-num">01</span>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff' }}>Authenticate &amp; Verify</h3>
+                  <p style={{ color: 'var(--text-mid)', fontSize: '0.85rem', lineHeight: 1.6 }}>
+                    Connect your identity. Role-based access control (RBAC) grants certified bidding credentials and idempotency keys.
+                  </p>
+                </div>
 
-            <div className="live-auction-cards-grid">
-              {/* Live Lot 1 */}
-              <div className="live-lot-card">
-                <div className="lot-img-wrap">
-                  <span>💎</span>
-                  <span className="lot-timer-chip mono">⏳ {formattedTimer}</span>
+                <div className="step-card card-3d-layer">
+                  <span className="step-num">02</span>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff' }}>Single-Writer Sequencing</h3>
+                  <p style={{ color: 'var(--text-mid)', fontSize: '0.85rem', lineHeight: 1.6 }}>
+                    All bids enter an atomic in-memory serialization queue (Redis Lua / LMAX loop) assigning strictly monotonic sequence tokens.
+                  </p>
                 </div>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.2rem' }}>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff' }}>Rare Genesis Art Token #01</h3>
-                    <span className="mono text-xs text-lo">#SYN-9024</span>
-                  </div>
-                  <span className="text-muted text-xs">Genesis Treasury Vault &bull; 14 Bidders Active</span>
+
+                <div className="step-card card-3d-layer">
+                  <span className="step-num">03</span>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff' }}>Realtime Pub/Sub Broadcast</h3>
+                  <p style={{ color: 'var(--text-mid)', fontSize: '0.85rem', lineHeight: 1.6 }}>
+                    Accepted bids are fanned out to thousands of connected clients in &lt;5ms via edge WebSockets and Supabase Realtime CDC.
+                  </p>
                 </div>
-                <div className="lot-bid-row">
+
+                <div className="step-card card-3d-layer">
+                  <span className="step-num">04</span>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff' }}>Immutable Ledger Settlement</h3>
+                  <p style={{ color: 'var(--text-mid)', fontSize: '0.85rem', lineHeight: 1.6 }}>
+                    Asynchronous write-behind flushing persists every transaction into PostgreSQL with cryptographic SHA-256 tamper-proof audits.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* 5. Top Verified Houses & Sellers */}
+            <section>
+              <div className="web3-section-title-wrap">
+                <span className="web3-section-badge">INSTITUTIONAL TRUST</span>
+                <h2 className="web3-section-heading">Top Verified Sellers</h2>
+              </div>
+
+              <div className="top-sellers-grid">
+                <div className="seller-card card-3d-layer">
+                  <div className="seller-avatar">🏛️</div>
                   <div>
-                    <span className="text-lo text-xs" style={{ display: 'block' }}>CURRENT HIGH BID</span>
-                    <strong className="mono" style={{ fontSize: '1.4rem', color: 'var(--cyan)' }}>${currentPrice.toLocaleString()}</strong>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <span className="text-lo text-xs" style={{ display: 'block' }}>HELD BY</span>
-                    <strong style={{ fontSize: '0.88rem', color: '#fff' }}>{highestBidder}</strong>
+                    <h4 style={{ color: '#fff', fontSize: '0.95rem', fontWeight: 800 }}>Genesis Treasury Vault</h4>
+                    <span className="text-muted text-xs">✓ Verified Master Issuer &bull; $42M Vol</span>
                   </div>
                 </div>
-                <button className="btn-place-bid-action" onClick={() => setActiveTab('auction')}>
-                  Place Bid Now →
-                </button>
-              </div>
 
-              {/* Live Lot 2 */}
-              <div className="live-lot-card">
-                <div className="lot-img-wrap" style={{ background: 'radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, rgba(10, 14, 26, 0.9) 70%)' }}>
-                  <span>⌚</span>
-                  <span className="lot-timer-chip mono" style={{ borderColor: 'rgba(56, 189, 248, 0.4)', color: '#38bdf8' }}>⏳ 01h 14m 20s</span>
-                </div>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.2rem' }}>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff' }}>Chrono-Quantum Tourbillon</h3>
-                    <span className="mono text-xs text-lo">#SYN-8840</span>
-                  </div>
-                  <span className="text-muted text-xs">Geneva Master Horlogerie &bull; 28 Bidders Active</span>
-                </div>
-                <div className="lot-bid-row">
+                <div className="seller-card card-3d-layer">
+                  <div className="seller-avatar">⚡</div>
                   <div>
-                    <span className="text-lo text-xs" style={{ display: 'block' }}>CURRENT HIGH BID</span>
-                    <strong className="mono" style={{ fontSize: '1.4rem', color: 'var(--purple)' }}>$48,500</strong>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <span className="text-lo text-xs" style={{ display: 'block' }}>HELD BY</span>
-                    <strong style={{ fontSize: '0.88rem', color: '#fff' }}>OmegaCapital#1</strong>
+                    <h4 style={{ color: '#fff', fontSize: '0.95rem', fontWeight: 800 }}>JaneStreet Liquidity Node</h4>
+                    <span className="text-muted text-xs">✓ Tier-1 Market Maker &bull; NY Edge</span>
                   </div>
                 </div>
-                <button className="btn-place-bid-action" onClick={() => setActiveTab('auction')} style={{ background: 'linear-gradient(135deg, #7c3aed 0%, #db2777 100%)' }}>
-                  Place Bid Now →
-                </button>
-              </div>
 
-              {/* Live Lot 3: Relief Exchange Innovation */}
-              <div className="live-lot-card" style={{ borderColor: 'rgba(16, 185, 129, 0.4)' }}>
-                <div className="lot-img-wrap" style={{ background: 'radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(10, 14, 26, 0.9) 70%)' }}>
-                  <span>🚑</span>
-                  <span className="lot-timer-chip mono" style={{ borderColor: 'rgba(244, 63, 94, 0.5)', color: '#fda4af' }}>⏳ {formattedReliefTimer}</span>
-                </div>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.2rem' }}>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff' }}>Emergency Oxygen Procurement</h3>
-                    <span className="mono text-xs" style={{ color: 'var(--rose)' }}>#REL-2026</span>
-                  </div>
-                  <span className="text-muted text-xs">City Emergency Hospital &bull; 500 Cylinders</span>
-                </div>
-                <div className="lot-bid-row">
+                <div className="seller-card card-3d-layer">
+                  <div className="seller-avatar">🏥</div>
                   <div>
-                    <span className="text-lo text-xs" style={{ display: 'block' }}>LEADING SUPPLIER COST</span>
-                    <strong className="mono" style={{ fontSize: '1.4rem', color: 'var(--emerald)' }}>{formatINR(bestReliefOffer ? bestReliefOffer.totalCost : 960000)}</strong>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <span className="text-lo text-xs" style={{ display: 'block' }}>WINNING SUPPLIER</span>
-                    <strong style={{ fontSize: '0.88rem', color: '#fff' }}>{bestReliefOffer ? bestReliefOffer.supplier.split(' ')[0] : 'Apex'}</strong>
+                    <h4 style={{ color: '#fff', fontSize: '0.95rem', fontWeight: 800 }}>City Emergency Healthcare</h4>
+                    <span className="text-muted text-xs">✓ Public Relief Buyer &bull; Verified</span>
                   </div>
                 </div>
-                <button className="btn-place-bid-action" onClick={() => setActiveTab('relief')} style={{ background: 'linear-gradient(135deg, #059669 0%, #0284c7 100%)' }}>
-                  Submit Supplier Offer →
+
+                <div className="seller-card card-3d-layer">
+                  <div className="seller-avatar">🛡️</div>
+                  <div>
+                    <h4 style={{ color: '#fff', fontSize: '0.95rem', fontWeight: 800 }}>Apex Institutional Custody</h4>
+                    <span className="text-muted text-xs">✓ Vault Secured &bull; London LD4</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 6. VIP Final Conversion Banner */}
+            <section className="final-cta-banner card-3d-layer">
+              <span className="web3-hero-pill">
+                GET STARTED IN SECONDS
+              </span>
+              <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 900, fontFamily: 'Space Grotesk, sans-serif', color: '#fff', letterSpacing: '-0.02em', maxWidth: '700px' }}>
+                Ready to Experience High-Speed Bidding?
+              </h2>
+              <p style={{ color: 'var(--text-mid)', fontSize: '1.05rem', maxWidth: '600px' }}>
+                Join thousands of concurrent traders on the single-writer linearizable floor.
+              </p>
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                <button className="btn-cta-explore" onClick={() => { setActiveTab('auction'); SoundFX.softClick(isSoundMuted); }}>
+                  Enter Live Floor →
+                </button>
+                <button className="btn-cta-sell" onClick={() => { setActiveTab('concurrency'); SoundFX.softClick(isSoundMuted); }}>
+                  Run 5,000 TPS Benchmark
                 </button>
               </div>
-            </div>
-          </section>
+            </section>
 
-          {/* 4. Trending Lots & Categories */}
-          <section>
-            <div className="web3-section-title-wrap">
-              <span className="web3-section-badge">CURATED ASSETS</span>
-              <h2 className="web3-section-heading">Featured Categories</h2>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem' }}>
-              <div className="seller-card" style={{ cursor: 'pointer' }} onClick={() => setActiveTab('auction')}>
-                <div className="seller-avatar">💎</div>
-                <div>
-                  <h4 style={{ color: '#fff', fontSize: '1rem', fontWeight: 800 }}>Digital &amp; Art Tokens</h4>
-                  <span className="text-muted text-xs">142 Active Lots &bull; $2.4M Volume</span>
-                </div>
-              </div>
-
-              <div className="seller-card" style={{ cursor: 'pointer' }} onClick={() => setActiveTab('auction')}>
-                <div className="seller-avatar" style={{ background: 'rgba(168, 85, 247, 0.3)' }}>⌚</div>
-                <div>
-                  <h4 style={{ color: '#fff', fontSize: '1rem', fontWeight: 800 }}>Haute Horlogerie</h4>
-                  <span className="text-muted text-xs">88 Verified Timepieces</span>
-                </div>
-              </div>
-
-              <div className="seller-card" style={{ cursor: 'pointer' }} onClick={() => setActiveTab('relief')}>
-                <div className="seller-avatar" style={{ background: 'rgba(16, 185, 129, 0.3)' }}>🚑</div>
-                <div>
-                  <h4 style={{ color: '#fff', fontSize: '1rem', fontWeight: 800 }}>Relief Procurement</h4>
-                  <span className="text-muted text-xs">Disaster Reverse Auctions</span>
-                </div>
-              </div>
-
-              <div className="seller-card" style={{ cursor: 'pointer' }} onClick={() => setActiveTab('concurrency')}>
-                <div className="seller-avatar" style={{ background: 'rgba(6, 182, 212, 0.3)' }}>⚡</div>
-                <div>
-                  <h4 style={{ color: '#fff', fontSize: '1rem', fontWeight: 800 }}>High-Frequency Lab</h4>
-                  <span className="text-muted text-xs">5,000 TPS Benchmark Suite</span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* 5. How It Works (Web3 Atomic Architecture) */}
-          <section>
-            <div className="web3-section-title-wrap">
-              <span className="web3-section-badge">UNDER THE HOOD</span>
-              <h2 className="web3-section-heading">How It Works</h2>
-              <p style={{ color: 'var(--text-mid)', fontSize: '0.9rem' }}>Deterministic execution with zero race condition conflicts</p>
-            </div>
-
-            <div className="how-it-works-grid">
-              <div className="step-card">
-                <span className="step-num">01</span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff' }}>Authenticate &amp; Verify</h3>
-                <p style={{ color: 'var(--text-mid)', fontSize: '0.85rem', lineHeight: 1.6 }}>
-                  Connect your identity. Role-based access control (RBAC) grants certified bidding credentials and idempotency keys.
-                </p>
-              </div>
-
-              <div className="step-card">
-                <span className="step-num">02</span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff' }}>Single-Writer Sequencing</h3>
-                <p style={{ color: 'var(--text-mid)', fontSize: '0.85rem', lineHeight: 1.6 }}>
-                  All bids enter an atomic in-memory serialization queue (Redis Lua / LMAX loop) assigning strictly monotonic sequence tokens.
-                </p>
-              </div>
-
-              <div className="step-card">
-                <span className="step-num">03</span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff' }}>Realtime Pub/Sub Broadcast</h3>
-                <p style={{ color: 'var(--text-mid)', fontSize: '0.85rem', lineHeight: 1.6 }}>
-                  Accepted bids are fanned out to thousands of connected clients in &lt;5ms via edge WebSockets and Supabase Realtime CDC.
-                </p>
-              </div>
-
-              <div className="step-card">
-                <span className="step-num">04</span>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#fff' }}>Immutable Ledger Settlement</h3>
-                <p style={{ color: 'var(--text-mid)', fontSize: '0.85rem', lineHeight: 1.6 }}>
-                  Asynchronous write-behind flushing persists every transaction into PostgreSQL with cryptographic SHA-256 tamper-proof audits.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* 6. Top Verified Sellers & Liquidity Providers */}
-          <section>
-            <div className="web3-section-title-wrap">
-              <span className="web3-section-badge">INSTITUTIONAL TRUST</span>
-              <h2 className="web3-section-heading">Top Verified Sellers</h2>
-            </div>
-
-            <div className="top-sellers-grid">
-              <div className="seller-card">
-                <div className="seller-avatar">🏛️</div>
-                <div>
-                  <h4 style={{ color: '#fff', fontSize: '0.95rem', fontWeight: 800 }}>Genesis Treasury Vault</h4>
-                  <span className="text-muted text-xs">✓ Verified Master Issuer &bull; $42M Vol</span>
-                </div>
-              </div>
-
-              <div className="seller-card">
-                <div className="seller-avatar" style={{ background: 'rgba(6, 182, 212, 0.3)' }}>⚡</div>
-                <div>
-                  <h4 style={{ color: '#fff', fontSize: '0.95rem', fontWeight: 800 }}>JaneStreet Liquidity Node</h4>
-                  <span className="text-muted text-xs">✓ Tier-1 Market Maker &bull; NY Edge</span>
-                </div>
-              </div>
-
-              <div className="seller-card">
-                <div className="seller-avatar" style={{ background: 'rgba(16, 185, 129, 0.3)' }}>🏥</div>
-                <div>
-                  <h4 style={{ color: '#fff', fontSize: '0.95rem', fontWeight: 800 }}>City Emergency Healthcare</h4>
-                  <span className="text-muted text-xs">✓ Public Relief Buyer &bull; Verified</span>
-                </div>
-              </div>
-
-              <div className="seller-card">
-                <div className="seller-avatar" style={{ background: 'rgba(168, 85, 247, 0.3)' }}>🛡️</div>
-                <div>
-                  <h4 style={{ color: '#fff', fontSize: '0.95rem', fontWeight: 800 }}>Apex Institutional Custody</h4>
-                  <span className="text-muted text-xs">✓ Vault Secured &bull; London LD4</span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* 7. Final High-Impact CTA */}
-          <section className="final-cta-banner">
-            <span className="web3-hero-pill" style={{ background: 'rgba(6, 182, 212, 0.15)', borderColor: 'rgba(6, 182, 212, 0.4)', color: '#22d3ee' }}>
-              GET STARTED IN SECONDS
-            </span>
-            <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 900, fontFamily: 'Space Grotesk, sans-serif', color: '#fff', letterSpacing: '-0.02em', maxWidth: '700px' }}>
-              Ready to Experience High-Speed Web3 Bidding?
-            </h2>
-            <p style={{ color: 'var(--text-mid)', fontSize: '1.05rem', maxWidth: '600px' }}>
-              Join thousands of concurrent traders on the single-writer linearizable floor.
-            </p>
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <button className="btn-cta-explore" onClick={() => setActiveTab('auction')}>
-                Enter Live Auction Floor →
-              </button>
-              <button className="btn-cta-sell" onClick={() => setActiveTab('concurrency')}>
-                Run 5,000 TPS Benchmark
-              </button>
-            </div>
-          </section>
-
+          </div>
         </div>
       )}
 
