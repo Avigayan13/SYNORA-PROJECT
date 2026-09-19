@@ -276,11 +276,14 @@ header {
 }
 .card:hover { box-shadow: var(--shadow-card-hover); }
 .card-header {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(8, 11, 20, 0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border-light);
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 .card-label {
   display: flex; align-items: center; gap: 0.35rem;
@@ -2615,4 +2618,102 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 .arch-node:hover {
   transform: translateY(-5px) scale(1.04);
   box-shadow: 0 0 30px rgba(129, 140, 248, 0.5);
+}
+
+
+/* ══════════════════════════════════════════════════════
+   SPACIOUS & SEPARATED FEATURE PAGES SYSTEM
+══════════════════════════════════════════════════════ */
+.view-container {
+  max-width: 1350px !important;
+  margin: 0 auto !important;
+  padding: 2.5rem 2rem 6rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2.5rem !important;
+}
+
+.feature-hero-banner {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 2.25rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-hero-banner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--cyan), var(--blue), var(--purple), var(--rose));
+}
+
+.feature-title-group h2 {
+  font-size: 1.65rem;
+  font-weight: 800;
+  font-family: 'Space Grotesk', sans-serif;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.4rem;
+}
+
+.feature-title-group p {
+  font-size: 0.9rem;
+  color: var(--text-mid);
+  max-width: 700px;
+  line-height: 1.6;
+}
+
+.feature-meta-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.feature-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--r-full);
+  font-size: 0.76rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--text-mid);
+}
+
+.feature-pill.active-pill {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+.card {
+  padding: 1.75rem 2rem !important;
+  border-radius: var(--r-xl) !important;
+  gap: 1.5rem !important;
+}
+
+.auction-room-grid {
+  gap: 2rem !important;
+}
+
+.kpi-grid {
+  gap: 1.25rem !important;
+}
+
+.strategy-grid {
+  gap: 1.25rem !important;
 }

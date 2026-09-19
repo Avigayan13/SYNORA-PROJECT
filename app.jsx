@@ -1666,14 +1666,16 @@ function App() {
       {activeTab === 'auction' && (
         <div className="view-container">
           
-          <div className="view-header">
-            <div className="view-title-group">
-              <h2>Official Live Bidding Room</h2>
-              <p>Lot #SYN-9024 • Rare Genesis Art Token #01 • Authoritative Single-Writer Sequencing</p>
+          {/* Dedicated Spacious Feature Header */}
+          <div className="feature-hero-banner">
+            <div className="feature-title-group">
+              <h2>🏛️ Official Live Auction Room</h2>
+              <p>Lot #SYN-9024: Rare Genesis Art Token #01 • Powered by Single-Writer Monotonic Serialization</p>
             </div>
-            <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
-              <span className="chip chip-emerald">Audited Auction Feed</span>
-              <span className="chip chip-cyan">Zero-Lock Linearizable</span>
+            <div className="feature-meta-pills">
+              <span className="feature-pill active-pill">● LIVE IN BIDDING</span>
+              <span className="feature-pill mono">LOT: SYN-9024</span>
+              <span className="feature-pill" style={{ color: 'var(--cyan)' }}>RESERVE: $10,000 (MET)</span>
             </div>
           </div>
 
