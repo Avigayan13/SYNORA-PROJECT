@@ -2316,3 +2316,169 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
   align-items: center;
   gap: 0.35rem;
 }
+
+
+/* ══════════════════════════════════════════════════════
+   HIGH-ENERGY FIGMA KINETIC ANIMATIONS & MOTION SYSTEM
+══════════════════════════════════════════════════════ */
+
+/* ── 1. Animated Gradient Flow on Titles ───────────── */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.brand-biiiid, .title-gradient {
+  background: linear-gradient(120deg, #38bdf8, #818cf8, #c084fc, #f43f5e, #38bdf8) !important;
+  background-size: 300% 300% !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: gradientShift 6s ease infinite !important;
+  filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.6)) !important;
+}
+
+/* ── 2. Floating 3D Auction Asset Animation ─────────── */
+@keyframes float3D {
+  0%   { transform: translateY(0px) rotate(0deg) scale(1); filter: drop-shadow(0 10px 20px rgba(129, 140, 248, 0.4)); }
+  50%  { transform: translateY(-12px) rotate(3deg) scale(1.05); filter: drop-shadow(0 25px 35px rgba(56, 189, 248, 0.6)); }
+  100% { transform: translateY(0px) rotate(0deg) scale(1); filter: drop-shadow(0 10px 20px rgba(129, 140, 248, 0.4)); }
+}
+
+.lot-token-icon, .lot-stage-icon, .bento-icon {
+  animation: float3D 4s ease-in-out infinite !important;
+  display: inline-block;
+}
+
+/* ── 3. Shimmer Sweep Reflection on Cards ───────────── */
+@keyframes shimmerLight {
+  0%   { transform: translateX(-150%) rotate(35deg); }
+  35%  { transform: translateX(250%) rotate(35deg); }
+  100% { transform: translateX(250%) rotate(35deg); }
+}
+
+.grand-price-card, .lot-hero-card, .bento-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.grand-price-card::after, .bento-card::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 40%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.03) 60%,
+    transparent 100%
+  );
+  transform: rotate(35deg);
+  animation: shimmerLight 7s infinite ease-in-out;
+  pointer-events: none;
+}
+
+/* ── 4. Glowing Live Pulsing Radar Rings ────────────── */
+@keyframes radarPing {
+  0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70%  { transform: scale(1); box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.pulse-dot {
+  animation: radarPing 2s cubic-bezier(0, 0, 0.2, 1) infinite !important;
+}
+
+/* ── 5. Continuous Kinetic Marquee Ticker ───────────── */
+@keyframes marqueeScroll {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-marquee-wrap {
+  width: 100%;
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.5rem 0;
+  display: flex;
+  white-space: nowrap;
+}
+
+.ticker-marquee-content {
+  display: inline-flex;
+  gap: 2.5rem;
+  animation: marqueeScroll 28s linear infinite;
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--text-mid);
+}
+
+.ticker-item strong {
+  color: #fff;
+}
+
+/* ── 6. Staggered Entrance Animations ───────────────── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.view-container, .landing-view-container {
+  animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.bento-card:nth-child(1) { animation: fadeInUp 0.5s ease-out 0.05s both; }
+.bento-card:nth-child(2) { animation: fadeInUp 0.5s ease-out 0.15s both; }
+.bento-card:nth-child(3) { animation: fadeInUp 0.5s ease-out 0.25s both; }
+.bento-card:nth-child(4) { animation: fadeInUp 0.5s ease-out 0.35s both; }
+
+/* ── 7. Glowing Button Hover Waves ──────────────────── */
+.btn-primary, .btn-danger, .btn-landing {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.7), 0 0 60px rgba(168, 85, 247, 0.4) !important;
+  transform: translateY(-3px) scale(1.02) !important;
+}
+
+/* ── 8. Laser Scanline Animation for Charts ─────────── */
+@keyframes scanline {
+  0%   { top: 0%; opacity: 0.8; }
+  50%  { opacity: 1; }
+  100% { top: 100%; opacity: 0.2; }
+}
+
+.telemetry-canvas-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.telemetry-canvas-wrap::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), #fff, var(--cyan), transparent);
+  box-shadow: 0 0 15px var(--cyan);
+  pointer-events: none;
+  z-index: 5;
+  animation: scanline 3.5s linear infinite;
+}

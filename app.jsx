@@ -1498,6 +1498,27 @@ function App() {
         </div>
       </header>
 
+      {/* ── CONTINUOUS KINETIC LIVE TICKER TAPE ── */}
+      <div className="ticker-marquee-wrap" aria-hidden="true">
+        <div className="ticker-marquee-content">
+          <span className="ticker-item"><span className="pulse-dot"></span> <strong>LOT #SYN-9024:</strong> Rare Genesis Art Token #01</span>
+          <span className="ticker-item" style={{ color: 'var(--cyan)' }}>⚡ <strong>PEAK CAPACITY:</strong> 5,000+ TPS Redis Lua Sequencer</span>
+          <span className="ticker-item" style={{ color: 'var(--emerald)' }}>🛡️ <strong>ORDERING:</strong> Strict Monotonic Sequence &bull; Zero Violations</span>
+          <span className="ticker-item" style={{ color: 'var(--amber)' }}>🚑 <strong>RELIEF EXCHANGE:</strong> Medical Cryo Oxygen Procurement Live</span>
+          <span className="ticker-item" style={{ color: 'var(--purple)' }}>💾 <strong>PERSISTENCE:</strong> {isSupabaseConnected ? 'Live Supabase PostgreSQL Connected' : 'In-Memory Serialization Active'}</span>
+          <span className="ticker-item">🔒 <strong>SECURITY:</strong> SHA-256 Tamper-Proof Audit Chain &bull; Rate Limited</span>
+
+          {/* Loop repeat */}
+          <span className="ticker-item"><span className="pulse-dot"></span> <strong>LOT #SYN-9024:</strong> Rare Genesis Art Token #01</span>
+          <span className="ticker-item" style={{ color: 'var(--cyan)' }}>⚡ <strong>PEAK CAPACITY:</strong> 5,000+ TPS Redis Lua Sequencer</span>
+          <span className="ticker-item" style={{ color: 'var(--emerald)' }}>🛡️ <strong>ORDERING:</strong> Strict Monotonic Sequence &bull; Zero Violations</span>
+          <span className="ticker-item" style={{ color: 'var(--amber)' }}>🚑 <strong>RELIEF EXCHANGE:</strong> Medical Cryo Oxygen Procurement Live</span>
+          <span className="ticker-item" style={{ color: 'var(--purple)' }}>💾 <strong>PERSISTENCE:</strong> {isSupabaseConnected ? 'Live Supabase PostgreSQL Connected' : 'In-Memory Serialization Active'}</span>
+          <span className="ticker-item">🔒 <strong>SECURITY:</strong> SHA-256 Tamper-Proof Audit Chain &bull; Rate Limited</span>
+        </div>
+      </div>
+
+
       {/* Global Toast Alert */}
       {secToast.visible && (
         <div style={{ maxWidth: '1500px', margin: '1rem auto 0', padding: '0 1.75rem' }}>
