@@ -1832,47 +1832,101 @@ function App() {
                 </div>
               </div>
 
-              {/* Real-time Bid Stream inside Auction Room */}
-              <div className="stream-card">
-                <div className="card-header" style={{ marginBottom: '0.6rem' }}>
-                  <span className="card-label">Recent Authorized Bids</span>
-                  <span className="text-muted text-xs">Live room feed</span>
+              {/* Pro High-Frequency Live Auction Stream Feed */}
+              <div className="stream-card pro-stream-card">
+                <div className="stream-header-bar">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                    <div className="live-stream-equalizer" title="Realtime Ingestion Active">
+                      <span className="eq-bar eq-1"></span>
+                      <span className="eq-bar eq-2"></span>
+                      <span className="eq-bar eq-3"></span>
+                      <span className="eq-bar eq-4"></span>
+                    </div>
+                    <div>
+                      <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#fff', margin: 0, fontFamily: 'Space Grotesk, sans-serif' }}>
+                        Live Transaction &amp; Bid Ingestion Stream
+                      </h4>
+                      <span className="text-muted text-xs" style={{ fontFamily: 'var(--font-mono)' }}>
+                        Monotonic Single-Writer Sequence &bull; {auditLog.length} Events Ingested
+                      </span>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                    <span className="stream-badge-pulse">● LIVE 60 FPS</span>
+                  </div>
                 </div>
+
                 {auditLog.length === 0 ? (
-                  <p className="text-muted text-xs" style={{ padding: '1rem 0' }}>
-                    No bids recorded yet in this session. Submit a bid using the console on the right.
-                  </p>
+                  <div className="empty-stream-placeholder">
+                    <div style={{ fontSize: '2.2rem', marginBottom: '0.4rem' }}>📡</div>
+                    <strong style={{ color: '#fff', fontSize: '0.9rem' }}>Awaiting Incoming Bids</strong>
+                    <p style={{ color: 'var(--text-mid)', fontSize: '0.78rem', maxWidth: '350px', margin: '0.2rem auto 0' }}>
+                      Place a manual bid on the right console or trigger a burst to see authoritative cryptographic bid records stream in real time.
+                    </p>
+                  </div>
                 ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', maxHeight: '180px', overflowY: 'auto' }}>
-                    {auditLog.slice(0, 8).map((item) => {
-                      const meta = getBidderMeta(item.bidder);
+                  <div className="stream-feed-list">
+                    {auditLog.map((item, idx) => {
+                      const meta = getBidderMeta(item.bidder, item.seq);
+                      const isFirst = idx === 0;
                       return (
-                        <div key={item.id} className="stream-bid-row">
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                        <div key={item.id} className={`pro-bid-card ${isFirst ? 'latest-bid-arrival' : ''} ${item.status === 'VIOLATION' ? 'bid-violation-card' : ''}`}>
+                          {/* Card Top Row: Sequence & Status & Timestamp */}
+                          <div className="pbc-top">
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                              <span className="mono" style={{ color: 'var(--cyan)', fontWeight: 800, fontSize: '0.75rem' }}>#{item.seq}</span>
-                              <strong style={{ color: '#fff', fontSize: '0.85rem' }}>{item.bidder}</strong>
-                              <span className="bidder-kyc-chip">✓ {meta.kyc.split(' ')[0]}</span>
+                              <span className="pbc-seq-badge mono">SEQ #{item.seq}</span>
+                              <span className="pbc-time mono">{item.time}</span>
+                              <span className="pbc-key-chip mono">{meta.keyId}</span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.7rem', color: 'var(--text-lo)', flexWrap: 'wrap' }}>
-                              <span className="mono text-amber" style={{ fontWeight: 700 }}>{meta.keyId}</span>
-                              <span>•</span>
-                              <span className="mono text-blue">{meta.traderId}</span>
-                              <span>•</span>
-                              <span>🌐 {meta.node}</span>
-                              <span>•</span>
-                              <span className="mono text-cyan">{item.latency.toFixed(1)}ms</span>
-                              <span>•</span>
-                              <span className="mono" style={{ color: 'var(--purple)' }}>{meta.sigHash}</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <span className="pbc-latency mono">⚡ {item.latency.toFixed(1)}ms</span>
+                              <span className={`status-tag ${item.status === 'ACCEPTED' ? 'accepted' : item.status === 'VIOLATION' ? 'violation' : 'rejected'}`}>
+                                {item.status}
+                              </span>
                             </div>
                           </div>
-                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.2rem' }}>
-                            <span className="mono" style={{ fontWeight: 800, fontSize: '0.95rem', color: item.status === 'ACCEPTED' ? '#34d399' : item.status === 'VIOLATION' ? '#fb7185' : '#fcd34d' }}>
-                              ${item.offered.toLocaleString()}
-                            </span>
-                            <span className={`audit-tag ${item.status === 'ACCEPTED' ? 'tag-accepted' : item.status === 'VIOLATION' ? 'tag-violation' : 'tag-rejected'}`} style={{ fontSize: '0.62rem' }}>
-                              {item.status}
-                            </span>
+
+                          {/* Card Middle: Bidder Profile & Price Offered */}
+                          <div className="pbc-main">
+                            <div className="pbc-trader-info">
+                              <div className="pbc-avatar">
+                                {item.bidder.substr(0, 2).toUpperCase()}
+                              </div>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                                  <strong className="pbc-name">{item.bidder}</strong>
+                                  <span className="bidder-kyc-chip">✓ {meta.kyc.split(' ')[0]}</span>
+                                  <span className="pbc-trader-id mono text-lo">{meta.traderId}</span>
+                                </div>
+                                <div className="pbc-routing-row">
+                                  <span>🌐 {meta.node}</span>
+                                  <span>&bull;</span>
+                                  <span className="mono" style={{ color: 'var(--blue)' }}>{meta.wallet}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="pbc-price-wrap">
+                              <span className="pbc-amount mono">${item.offered.toLocaleString()}</span>
+                              <span className="pbc-reason text-muted text-xs">{item.reason}</span>
+                            </div>
+                          </div>
+
+                          {/* Card Bottom: Cryptographic Proof & Escrow */}
+                          <div className="pbc-footer">
+                            <div className="pbc-crypto-pill">
+                              <span className="text-lo">SIG:</span>
+                              <span className="mono text-purple">{meta.sigHash}</span>
+                            </div>
+                            <div className="pbc-crypto-pill">
+                              <span className="text-lo">ESCROW:</span>
+                              <span className="mono" style={{ color: 'var(--emerald)' }}>{meta.escrow}</span>
+                            </div>
+                            <div className="pbc-crypto-pill">
+                              <span className="text-lo">ROUTING:</span>
+                              <span className="mono text-lo">{meta.protocol}</span>
+                            </div>
                           </div>
                         </div>
                       );
