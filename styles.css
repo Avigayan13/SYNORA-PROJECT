@@ -2482,3 +2482,137 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
   z-index: 5;
   animation: scanline 3.5s linear infinite;
 }
+
+
+/* ══════════════════════════════════════════════════════
+   FEATURE OPENING & DYNAMIC TAB TRANSITION MOTION
+══════════════════════════════════════════════════════ */
+
+/* ── 1. Page / Feature View Portal Entrance ────────── */
+@keyframes featurePortalIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(24px);
+    filter: blur(8px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.008) translateY(-3px);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0px);
+  }
+}
+
+.view-container, .landing-view-container {
+  animation: featurePortalIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+/* ── 2. Staggered Cascading Card Entrance ──────────── */
+@keyframes cardCascadePop {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.94);
+  }
+  70% {
+    transform: translateY(-4px) scale(1.015);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.auction-room-grid > div,
+.kpi-grid > .kpi-card,
+.strategy-grid > .strategy-card,
+.provenance-grid > .provenance-item,
+.sec-card,
+.arch-feature-card {
+  animation: cardCascadePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Stagger Delays */
+.auction-room-grid > div:nth-child(1) { animation-delay: 0.05s; }
+.auction-room-grid > div:nth-child(2) { animation-delay: 0.15s; }
+
+.kpi-grid > .kpi-card:nth-child(1) { animation-delay: 0.08s; }
+.kpi-grid > .kpi-card:nth-child(2) { animation-delay: 0.16s; }
+.kpi-grid > .kpi-card:nth-child(3) { animation-delay: 0.24s; }
+.kpi-grid > .kpi-card:nth-child(4) { animation-delay: 0.32s; }
+
+.strategy-grid > .strategy-card:nth-child(1) { animation-delay: 0.05s; }
+.strategy-grid > .strategy-card:nth-child(2) { animation-delay: 0.12s; }
+.strategy-grid > .strategy-card:nth-child(3) { animation-delay: 0.19s; }
+.strategy-grid > .strategy-card:nth-child(4) { animation-delay: 0.26s; }
+
+/* ── 3. Active Nav Tab Glowing Aura & Ripple ────────── */
+.nav-tab {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-tab:hover {
+  transform: translateY(-2px);
+  color: #fff !important;
+}
+
+.nav-tab.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.4)) !important;
+  border-color: rgba(168, 85, 247, 0.7) !important;
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.45), inset 0 0 12px rgba(99, 102, 241, 0.3) !important;
+  animation: tabGlowPulse 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes tabGlowPulse {
+  0%   { box-shadow: 0 0 15px rgba(168, 85, 247, 0.35); }
+  100% { box-shadow: 0 0 30px rgba(56, 189, 248, 0.6), 0 0 10px rgba(168, 85, 247, 0.8); }
+}
+
+/* ── 4. Rotating Holographic Neon Border on Highlight Cards ── */
+@keyframes neonBorderRotate {
+  0%   { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+.grand-price-card {
+  border: 1px solid rgba(129, 140, 248, 0.4) !important;
+  box-shadow: 0 10px 40px -5px rgba(0, 0, 0, 0.7), 0 0 25px rgba(99, 102, 241, 0.25) !important;
+  animation: neonBorderRotate 12s linear infinite;
+}
+
+/* ── 5. Live Spring Bounce on Price Flashes ─────────── */
+@keyframes springPricePop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12); color: #38bdf8; text-shadow: 0 0 35px rgba(56, 189, 248, 0.8); }
+  70%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+.grand-price-card.flash-success .grand-price-amount {
+  animation: springPricePop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+/* ── 6. Architecture Node Neon Flow ────────────────── */
+@keyframes flowDash {
+  to {
+    stroke-dashoffset: -60;
+  }
+}
+
+.arch-flow-svg path {
+  stroke-dasharray: 6, 6;
+  animation: flowDash 2.5s linear infinite;
+}
+
+.arch-node {
+  transition: all 0.25s ease;
+}
+.arch-node:hover {
+  transform: translateY(-5px) scale(1.04);
+  box-shadow: 0 0 30px rgba(129, 140, 248, 0.5);
+}
