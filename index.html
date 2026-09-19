@@ -262,6 +262,42 @@ const USER_ROLES = {
 // ═══════════════════════════════════════════════════════════════════════
 // MAIN APPLICATION COMPONENT
 // ═══════════════════════════════════════════════════════════════════════
+
+// --- BOT NODES & KYC REGISTRATION METADATA ---
+const BOT_METADATA = {
+  'AlgoTrader-α': { node: 'Tokyo (ap-northeast-1)', wallet: '0x3F1A...89BC', kyc: 'Tier-1 Institutional' },
+  'QuantFund-9': { node: 'Zurich FinNet (eu-central)', wallet: '0x8B2C...44EF', kyc: 'Tier-1 Institutional' },
+  'HFT_Tokyo': { node: 'Tokyo HFT Gate', wallet: '0x1A4D...90AA', kyc: 'Tier-1 High-Frequency' },
+  'ArbitrageX': { node: 'London Equinix LD4', wallet: '0x7C99...22B1', kyc: 'Tier-1 Market Maker' },
+  'LiquidityEng': { node: 'Frankfurt FR2 Gateway', wallet: '0x4E55...77C0', kyc: 'Tier-1 Institutional' },
+  'OmegaCapital': { node: 'New York NY4 Edge', wallet: '0x22F1...33D8', kyc: 'Tier-1 Prime Broker' },
+  'ApexBidder': { node: 'Singapore SG1', wallet: '0x66B0...99EA', kyc: 'Tier-1 Quantitative' },
+  'CitadelNode': { node: 'Chicago CME Direct', wallet: '0x9911...FA42', kyc: 'Tier-1 Market Maker' },
+  'JaneStreetBot': { node: 'New York Cross-Connect', wallet: '0x55AA...8811', kyc: 'Tier-1 Liquidity Node' },
+  'JumpTradingV2': { node: 'Aurora Colocation', wallet: '0x11DD...66CC', kyc: 'Tier-1 Algo' },
+  'TowerResearch': { node: 'Secaucus NY', wallet: '0x88EE...2211', kyc: 'Tier-1 High-Frequency' },
+  'OptiverProxy': { node: 'Amsterdam AMS9', wallet: '0x3344...9988', kyc: 'Tier-1 Market Maker' },
+  'SuspenseBot': { node: 'Mumbai ap-south-1', wallet: '0x7788...5544', kyc: 'Verified Trader' },
+  'MarketMaker-7': { node: 'Hong Kong HK2', wallet: '0x2233...7788', kyc: 'Tier-1 Market Maker' },
+  'FlashBid-AI': { node: 'Dublin Edge Gateway', wallet: '0x4455...6677', kyc: 'Tier-1 Algorithmic' },
+  'NexusBidder': { node: 'Seoul KR1 Gateway', wallet: '0x9900...1122', kyc: 'Tier-1 Institutional' },
+};
+
+function getBidderMeta(bidderName) {
+  if (bidderName.includes('You') || bidderName.includes('Alex')) {
+    return { node: 'AWS ap-south-1 (Mumbai Gateway)', wallet: '0x7F3A...9C1D', kyc: 'Tier-1 KYC Verified (You)' };
+  }
+  if (bidderName.includes('Genesis')) {
+    return { node: 'Genesis Master Custody Node', wallet: '0x9024...ETH1', kyc: 'Treasury Reserve' };
+  }
+  for (const key of Object.keys(BOT_METADATA)) {
+    if (bidderName.includes(key)) {
+      return BOT_METADATA[key];
+    }
+  }
+  return { node: 'Global Edge Node #12', wallet: '0x' + Math.random().toString(16).substr(2, 8).toUpperCase() + '...', kyc: 'Verified Trader' };
+}
+
 function App() {
   // Navigation View State: 'auction' | 'concurrency' | 'relief' | 'security' | 'architecture'
   const [activeTab, setActiveTab] = useState('landing');
@@ -1780,20 +1816,35 @@ function App() {
                   </p>
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', maxHeight: '180px', overflowY: 'auto' }}>
-                    {auditLog.slice(0, 6).map((item) => (
-                      <div key={item.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.45rem 0.65rem', background: 'var(--bg-surface)', borderRadius: 'var(--r-sm)', fontSize: '0.78rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                          <span className="mono text-lo">#{item.seq}</span>
-                          <span style={{ fontWeight: 600, color: 'var(--cyan)' }}>{item.bidder}</span>
+                    {auditLog.slice(0, 8).map((item) => {
+                      const meta = getBidderMeta(item.bidder);
+                      return (
+                        <div key={item.id} className="stream-bid-row">
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <span className="mono" style={{ color: 'var(--cyan)', fontWeight: 800, fontSize: '0.75rem' }}>#{item.seq}</span>
+                              <strong style={{ color: '#fff', fontSize: '0.85rem' }}>{item.bidder}</strong>
+                              <span className="bidder-kyc-chip">✓ {meta.kyc.split(' ')[0]}</span>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.7rem', color: 'var(--text-lo)' }}>
+                              <span>🌐 {meta.node}</span>
+                              <span>•</span>
+                              <span className="mono">{meta.wallet}</span>
+                              <span>•</span>
+                              <span className="mono text-cyan">{item.latency.toFixed(1)}ms</span>
+                            </div>
+                          </div>
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.2rem' }}>
+                            <span className="mono" style={{ fontWeight: 800, fontSize: '0.95rem', color: item.status === 'ACCEPTED' ? '#34d399' : item.status === 'VIOLATION' ? '#fb7185' : '#fcd34d' }}>
+                              ${item.offered.toLocaleString()}
+                            </span>
+                            <span className={`audit-tag ${item.status === 'ACCEPTED' ? 'tag-accepted' : item.status === 'VIOLATION' ? 'tag-violation' : 'tag-rejected'}`} style={{ fontSize: '0.62rem' }}>
+                              {item.status}
+                            </span>
+                          </div>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                          <span className="mono" style={{ fontWeight: 700 }}>${item.offered.toLocaleString()}</span>
-                          <span className={`audit-tag ${item.status === 'ACCEPTED' ? 'tag-accepted' : item.status === 'VIOLATION' ? 'tag-violation' : 'tag-rejected'}`}>
-                            {item.status}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -1816,8 +1867,28 @@ function App() {
                   <div className="price-label">Current Highest Authoritative Bid</div>
                   <div className="grand-price-amount">${currentPrice.toLocaleString()}</div>
                   <div className="price-meta" style={{ marginTop: '0.35rem' }}>
-                    <span>Held by <strong className="text-cyan">{highestBidder}</strong></span>
-                    <span className="mono text-muted text-xs">Seq #{highestSeq}</span>
+                    <span>Leading Bidder: <strong className="text-cyan" style={{ fontSize: '0.92rem' }}>{highestBidder}</strong></span>
+                    <span className="mono text-muted text-xs">Sequence Token: #{highestSeq}</span>
+                  </div>
+
+                  {/* Rich Leading Bidder Verification Passport */}
+                  <div className="bidder-passport-card">
+                    <div className="bp-row">
+                      <span className="bp-label">KYC STATUS</span>
+                      <span className="bp-val" style={{ color: 'var(--emerald)' }}>✓ {getBidderMeta(highestBidder).kyc}</span>
+                    </div>
+                    <div className="bp-row">
+                      <span className="bp-label">NODE GATEWAY</span>
+                      <span className="bp-val mono">{getBidderMeta(highestBidder).node}</span>
+                    </div>
+                    <div className="bp-row">
+                      <span className="bp-label">ACCOUNT WALLET</span>
+                      <span className="bp-val mono" style={{ color: 'var(--blue)' }}>{getBidderMeta(highestBidder).wallet}</span>
+                    </div>
+                    <div className="bp-row">
+                      <span className="bp-label">LATENCY / SPEED</span>
+                      <span className="bp-val mono" style={{ color: 'var(--cyan)' }}>0.4 ms (Zero DB Contention)</span>
+                    </div>
                   </div>
                 </div>
 
