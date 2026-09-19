@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>THE BIIIID | FROM SYNORA — Real-Time Auction &amp; Concurrency Lab</title>
+  <title>THE BIIIID | FROM SYNORA — High-End Monochrome 3D Auction House</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   
   <!-- Typography & Monospace Fonts -->
@@ -41,42 +41,113 @@ function formatINR(val) {
   return '₹' + Number(val).toLocaleString('en-IN');
 }
 
-// --- AUDIO SYNTHESIS HELPER ---
+// --- HIGH-END WEB AUDIO SOUND ENGINE ---
 let audioCtx = null;
-function playSound(isAccepted, isViolation) {
-  try {
-    if (!audioCtx && (window.AudioContext || window.webkitAudioContext)) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (!audioCtx) return;
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    
-    const now = audioCtx.currentTime;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    if (isViolation) {
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(220, now);
-      osc.frequency.exponentialRampToValueAtTime(110, now + 0.12);
-      gain.gain.setValueAtTime(0.12, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-      osc.start(now);
-      osc.stop(now + 0.12);
-    } else if (isAccepted) {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(660, now);
-      osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
-      gain.gain.setValueAtTime(0.07, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-      osc.start(now);
-      osc.stop(now + 0.08);
-    }
-  } catch (e) {
-    // Audio gestures might be muted before user gesture
+function getAudioCtx() {
+  if (!audioCtx && (window.AudioContext || window.webkitAudioContext)) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+const SoundFX = {
+  softClick: (isMuted) => {
+    if (isMuted) return;
+    try {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, ctx.currentTime);
+      gain.gain.setValueAtTime(0.03, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.04);
+    } catch(e){}
+  },
+  tick: (isMuted) => {
+    if (isMuted) return;
+    try {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(1200, ctx.currentTime);
+      gain.gain.setValueAtTime(0.025, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.03);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.03);
+    } catch(e){}
+  },
+  chime: (isMuted) => {
+    if (isMuted) return;
+    try {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      [528, 880].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        const start = ctx.currentTime + (i * 0.04);
+        osc.frequency.setValueAtTime(freq, start);
+        gain.gain.setValueAtTime(0.05, start);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.22);
+        osc.start(start);
+        osc.stop(start + 0.22);
+      });
+    } catch(e){}
+  },
+  outbid: (isMuted) => {
+    if (isMuted) return;
+    try {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(260, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(130, ctx.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.04, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.12);
+    } catch(e){}
+  },
+  hover: (isMuted) => {
+    if (isMuted) return;
+    try {
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1400, ctx.currentTime);
+      gain.gain.setValueAtTime(0.01, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.02);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.02);
+    } catch(e){}
+  }
+};
+
+function playSound(isAccepted, isViolation, isMuted = false) {
+  if (isViolation) SoundFX.outbid(isMuted);
+  else if (isAccepted) SoundFX.chime(isMuted);
 }
 
 // --- BOT NAMES FOR STRESS TESTING ---
@@ -443,9 +514,73 @@ function Hero3DComposition({ currentPrice, highestBidder, timeLeftSec, formatted
 }
 
 
+// --- CINEMATIC FULL-SCREEN 3D PRELOADER INTRO ---
+function CinematicIntro({ onComplete }) {
+  const [stage, setStage] = useState('active'); // 'active' | 'fading' | 'done'
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setStage('fading');
+      setTimeout(() => onComplete(), 700);
+    }, 4200);
+    return () => clearTimeout(timer);
+  }, [onComplete]);
+
+  const handleSkip = () => {
+    setStage('fading');
+    setTimeout(() => onComplete(), 300);
+  };
+
+  if (stage === 'done') return null;
+
+  return (
+    <div className={`cinematic-preloader ${stage === 'fading' ? 'fade-out' : ''}`}>
+      <button className="btn-skip-intro" onClick={handleSkip}>
+        Skip Intro ✕
+      </button>
+      <div className="intro-content-wrap">
+        <div className="intro-monogram">SYNORA</div>
+        <div className="intro-hairline-rule" />
+        <div className="intro-tagline">The Future of Real-Time High-Frequency Auctions</div>
+        <div className="intro-3d-stage">
+          <div className="intro-3d-rings" />
+          <div className="intro-3d-artifact">💎</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 function App() {
   // Navigation View State: 'auction' | 'concurrency' | 'relief' | 'security' | 'architecture'
   const [activeTab, setActiveTab] = useState('landing');
+  // Audio & Intro Experience State
+  const [isSoundMuted, setIsSoundMuted] = useState(() => localStorage.getItem('synora_sound_muted') === 'true');
+  const [showIntro, setShowIntro] = useState(() => sessionStorage.getItem('synora_intro_seen') !== 'true');
+  const [watchlist, setWatchlist] = useState(['SYN-9024', 'SYN-8840']);
+  const [isWatchlistModalOpen, setIsWatchlistModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+
+  const toggleSound = () => {
+    setIsSoundMuted(prev => {
+      const next = !prev;
+      localStorage.setItem('synora_sound_muted', String(next));
+      if (!next) SoundFX.chime(false);
+      return next;
+    });
+  };
+
+  const toggleWatchlist = (id) => {
+    setWatchlist(prev => {
+      const exists = prev.includes(id);
+      const next = exists ? prev.filter(x => x !== id) : [...prev, id];
+      SoundFX.softClick(isSoundMuted);
+      return next;
+    });
+  };
+
 
   // Auction State
   const [strategy, setStrategy] = useState('atomic');
@@ -1593,6 +1728,15 @@ function App() {
   // ═══════════════════════════════════════════════════════════════════════
   return (
     <>
+      {/* ── CINEMATIC FULL-SCREEN 3D PRELOADER ── */}
+      {showIntro && (
+        <CinematicIntro
+          onComplete={() => {
+            sessionStorage.setItem('synora_intro_seen', 'true');
+            setShowIntro(false);
+          }}
+        />
+      )}
       {/* ── TOP STICKY HEADER WITH NAVIGATION BAR ── */}
       <header role="banner">
         <div className="header-inner">
@@ -1618,6 +1762,28 @@ function App() {
             >
               <span className="supabase-dot"></span>
               <span>{isSupabaseConnected ? '⚡ Supabase DB: Live' : '🔌 Supabase DB'}</span>
+            </button>
+                        <button
+              className="btn-sound-toggle"
+              onClick={toggleSound}
+              title={isSoundMuted ? "Enable sound effects" : "Mute sound effects"}
+            >
+              <span>{isSoundMuted ? '🔇 Muted' : '🔊 Audio'}</span>
+            </button>
+            <button
+              className="btn-watchlist-pill"
+              onClick={() => setIsWatchlistModalOpen(true)}
+              title="View your saved lots"
+            >
+              <span>★ Watchlist</span>
+              <span className="watchlist-count-badge">{watchlist.length}</span>
+            </button>
+            <button
+              className="btn btn-sm btn-ghost"
+              onClick={() => { setShowIntro(true); SoundFX.softClick(isSoundMuted); }}
+              title="Replay cinematic intro animation"
+            >
+              🎬 Intro
             </button>
             <button
               className="btn btn-sm btn-ghost"
@@ -1821,6 +1987,52 @@ function App() {
               <h2 className="web3-section-heading">Live Auctions</h2>
               <p style={{ color: 'var(--text-mid)', fontSize: '0.9rem' }}>Real-time streaming lots available for instant bidding</p>
             </div>
+
+            {/* Search & Category Filter Bar */}
+            <div className="auction-filter-bar">
+              <div className="search-input-wrap">
+                <span className="search-icon">🔍</span>
+                <input
+                  type="text"
+                  className="search-input"
+                  placeholder="Search by lot title, ID, or curator..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  aria-label="Search lots"
+                />
+                {searchQuery && (
+                  <button className="btn-clear-search" onClick={() => setSearchQuery('')}>✕</button>
+                )}
+              </div>
+
+              <div className="filter-pill-group">
+                <button
+                  className={`filter-pill ${categoryFilter === 'all' ? 'active' : ''}`}
+                  onClick={() => { setCategoryFilter('all'); SoundFX.softClick(isSoundMuted); }}
+                >
+                  All Lots
+                </button>
+                <button
+                  className={`filter-pill ${categoryFilter === 'art' ? 'active' : ''}`}
+                  onClick={() => { setCategoryFilter('art'); SoundFX.softClick(isSoundMuted); }}
+                >
+                  Fine Art &amp; Tokens
+                </button>
+                <button
+                  className={`filter-pill ${categoryFilter === 'watches' ? 'active' : ''}`}
+                  onClick={() => { setCategoryFilter('watches'); SoundFX.softClick(isSoundMuted); }}
+                >
+                  Watches
+                </button>
+                <button
+                  className={`filter-pill ${categoryFilter === 'relief' ? 'active' : ''}`}
+                  onClick={() => { setCategoryFilter('relief'); SoundFX.softClick(isSoundMuted); }}
+                >
+                  Relief Exchange
+                </button>
+              </div>
+            </div>
+
 
             <div className="live-auction-cards-grid">
               {/* Live Lot 1 */}
