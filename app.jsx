@@ -2306,24 +2306,85 @@ function App() {
       )}
 
       {/* ═══════════════════════════════════════════════════════════════
-          VIEW 3: SYNORA RELIEF EXCHANGE — EMERGENCY PROCUREMENT MODE
+          VIEW 3: SYNORA RELIEF EXCHANGE — FLAGSHIP INNOVATION MODE
       ═══════════════════════════════════════════════════════════════ */}
       {activeTab === 'relief' && (
         <div className="view-container">
           
-          <div className="view-header">
-            <div className="view-title-group">
-              <h2>SYNORA Relief Exchange — Emergency Procurement Mode</h2>
-              <p>Reverse auction protocol: verified suppliers submit competitive offers to fulfill urgent public emergencies under strict atomic compliance.</p>
+          {/* 🌟 LUXURY MISSION COMMAND HEADER FOR RELIEF EXCHANGE 🌟 */}
+          <div className="relief-flagship-header">
+            {/* Top Glowing Ambient Siren Aura */}
+            <div className="relief-header-top-bar">
+              <div className="relief-siren-pill">
+                <span className="siren-pulse-dot"></span>
+                <span>DISASTER RESPONSE PROTOCOL ACTIVE &bull; LOT #REL-2026-0918</span>
+              </div>
+              <div className="relief-innovation-chip">
+                <span>★ SYNORA PATENTED REVERSE ATOMIC TIE-BREAKER</span>
+              </div>
             </div>
-            <div style={{ display: 'flex', gap: '0.6rem', alignItems: 'center' }}>
-              <span className="relief-tag-urgent">
-                <span className="pulse-dot" style={{ background: 'var(--rose)' }}></span>
-                Priority Emergency
-              </span>
-              <span className="relief-status-chip">
-                <span>✓</span> Verified Suppliers Only
-              </span>
+
+            {/* Main Header Presentation */}
+            <div className="relief-header-main">
+              <div className="relief-header-icon-wrap">
+                <span className="relief-huge-icon">🚑</span>
+              </div>
+
+              <div className="relief-header-titles">
+                <div className="relief-tagline-row">
+                  <span className="relief-accent-badge">REVERSE AUCTION PROTOCOL</span>
+                  <span className="relief-accent-badge" style={{ background: 'rgba(56, 189, 248, 0.15)', color: 'var(--cyan)' }}>PUBLIC HEALTHCARE INITIATIVE</span>
+                  <span className="relief-accent-badge" style={{ background: 'rgba(168, 85, 247, 0.15)', color: 'var(--purple)' }}>ZERO CORRUPTION AUDIT</span>
+                </div>
+                <h2 className="relief-flagship-title">
+                  SYNORA Relief Exchange <span className="relief-title-gradient">&bull; Emergency Procurement</span>
+                </h2>
+                <p className="relief-flagship-desc">
+                  When seconds save lives, SYNORA reverses the bidding engine: verified suppliers submit competitive, downward-price offers to fulfill urgent public crises. The atomic sequencer guarantees transparent, corruption-free contract awards based on strict delivery speed, ISO compliance, and taxpayer savings.
+                </p>
+              </div>
+
+              {/* Countdown & Public Savings Card */}
+              <div className="relief-mission-clock-card">
+                <div className="rmc-label">EMERGENCY CLOSING DEADLINE</div>
+                <div className="rmc-timer mono">{formattedReliefTimer}</div>
+                <div className="rmc-savings-row">
+                  <span className="rmc-savings-label">TAXPAYER FUNDS SAVED</span>
+                  <strong className="rmc-savings-amount mono">{formatINR(reliefSimStats.savings)}</strong>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom 4-Pillar Parameter Badges */}
+            <div className="relief-pillars-ribbon">
+              <div className="relief-pillar-item">
+                <span className="rp-icon">🏥</span>
+                <div>
+                  <span className="rp-label">PROCURING BUYER</span>
+                  <strong className="rp-val">City Emergency Hospital</strong>
+                </div>
+              </div>
+              <div className="relief-pillar-item">
+                <span className="rp-icon">🧪</span>
+                <div>
+                  <span className="rp-label">REQUIRED QUANTITY</span>
+                  <strong className="rp-val mono">500 Oxygen Cylinders</strong>
+                </div>
+              </div>
+              <div className="relief-pillar-item">
+                <span className="rp-icon">⏱️</span>
+                <div>
+                  <span className="rp-label">DELIVERY DEADLINE</span>
+                  <strong className="rp-val mono" style={{ color: 'var(--rose)' }}>&le; 4.0 Hours Max</strong>
+                </div>
+              </div>
+              <div className="relief-pillar-item">
+                <span className="rp-icon">💰</span>
+                <div>
+                  <span className="rp-label">BUDGET CEILING</span>
+                  <strong className="rp-val mono" style={{ color: 'var(--emerald)' }}>₹12,00,000 Cap</strong>
+                </div>
+              </div>
             </div>
           </div>
 

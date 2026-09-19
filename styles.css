@@ -3237,3 +3237,245 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
   padding: 0.15rem 0.5rem;
   border-radius: var(--r-sm);
 }
+
+
+/* ══════════════════════════════════════════════════════
+   FLAGSHIP LUXURY RELIEF MISSION COMMAND HEADER STYLES
+══════════════════════════════════════════════════════ */
+.relief-flagship-header {
+  background: linear-gradient(135deg, rgba(16, 28, 48, 0.95), rgba(9, 16, 28, 0.98));
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: var(--r-xl);
+  padding: 2.25rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 35px rgba(16, 185, 129, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+
+.relief-flagship-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #10b981, #38bdf8, #f43f5e, #10b981);
+  background-size: 200% 100%;
+  animation: headerGradientSlide 6s linear infinite;
+}
+
+@keyframes headerGradientSlide {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+.relief-header-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.relief-siren-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: rgba(244, 63, 94, 0.15);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  color: #fda4af;
+  padding: 0.32rem 0.85rem;
+  border-radius: var(--r-full);
+  font-size: 0.72rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+  box-shadow: 0 0 15px rgba(244, 63, 94, 0.25);
+}
+
+.siren-pulse-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--rose);
+  box-shadow: 0 0 10px var(--rose);
+  animation: sirenFlash 1s ease-in-out infinite alternate;
+}
+
+@keyframes sirenFlash {
+  0%   { transform: scale(0.85); opacity: 0.6; }
+  100% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 14px #ff3366; }
+}
+
+.relief-innovation-chip {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #c084fc;
+  padding: 0.32rem 0.85rem;
+  border-radius: var(--r-full);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+}
+
+.relief-header-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.relief-header-icon-wrap {
+  width: 72px; height: 72px;
+  border-radius: var(--r-xl);
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem;
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+  flex-shrink: 0;
+}
+
+.relief-header-titles {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.relief-tagline-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.relief-accent-badge {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #34d399;
+  font-size: 0.64rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+  letter-spacing: 0.08em;
+}
+
+.relief-flagship-title {
+  font-size: 2.1rem;
+  font-weight: 900;
+  font-family: 'Space Grotesk', sans-serif;
+  color: #fff;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.relief-title-gradient {
+  background: linear-gradient(135deg, #10b981 0%, #38bdf8 50%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.4));
+}
+
+.relief-flagship-desc {
+  font-size: 0.88rem;
+  color: var(--text-mid);
+  line-height: 1.65;
+  max-width: 780px;
+}
+
+.relief-mission-clock-card {
+  background: rgba(10, 15, 28, 0.9);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  border-radius: var(--r-xl);
+  padding: 1.4rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.4rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(244, 63, 94, 0.2);
+  flex-shrink: 0;
+}
+
+.rmc-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #fda4af;
+}
+
+.rmc-timer {
+  font-size: 2.1rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 20px rgba(244, 63, 94, 0.5);
+}
+
+.rmc-savings-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-light);
+  width: 100%;
+}
+
+.rmc-savings-label {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--text-lo);
+}
+
+.rmc-savings-amount {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #34d399;
+  text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+
+.relief-pillars-ribbon {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.relief-pillar-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-md);
+  padding: 0.85rem 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.relief-pillar-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.rp-icon {
+  font-size: 1.5rem;
+}
+
+.rp-label {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--text-lo);
+}
+
+.rp-val {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #fff;
+}
