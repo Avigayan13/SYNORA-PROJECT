@@ -264,7 +264,7 @@ const USER_ROLES = {
 // ═══════════════════════════════════════════════════════════════════════
 function App() {
   // Navigation View State: 'auction' | 'concurrency' | 'relief' | 'security' | 'architecture'
-  const [activeTab, setActiveTab] = useState('auction');
+  const [activeTab, setActiveTab] = useState('landing');
 
   // Auction State
   const [strategy, setStrategy] = useState('atomic');
@@ -1454,6 +1454,15 @@ function App() {
         <div className="header-nav-row">
           <nav className="nav-tabs" role="tablist" aria-label="Main system views">
             <button
+              className={`nav-tab ${activeTab === 'landing' ? 'active' : ''}`}
+              onClick={() => setActiveTab('landing')}
+              role="tab"
+              aria-selected={activeTab === 'landing'}
+            >
+              <span>✨ Platform Hub</span>
+              <span className="nav-tab-badge" style={{ background: 'rgba(56, 189, 248, 0.2)', color: 'var(--cyan)' }}>MAIN</span>
+            </button>
+            <button
               className={`nav-tab ${activeTab === 'auction' ? 'active' : ''}`}
               onClick={() => setActiveTab('auction')}
               role="tab"
@@ -1524,6 +1533,138 @@ function App() {
           <div className={`sec-alert-toast sec-alert-${secToast.type}`} role="alert">
             {secToast.text}
           </div>
+        </div>
+      )}
+
+            {/* ═══════════════════════════════════════════════════════════════
+          VIEW 0: ANIMATED LANDING PAGE & PLATFORM HUB
+      ═══════════════════════════════════════════════════════════════ */}
+      {activeTab === 'landing' && (
+        <div className="landing-view-container">
+          
+          {/* Animated Ambient Floating Orbs */}
+          <div className="landing-ambient-orbs" aria-hidden="true">
+            <div className="landing-orb orb-1"></div>
+            <div className="landing-orb orb-2"></div>
+            <div className="landing-orb orb-3"></div>
+          </div>
+
+          {/* Hero Section */}
+          <section className="landing-hero">
+            <div className="landing-hero-chip">
+              <span className="pulse-dot"></span>
+              <span>ENTERPRISE HIGH-CONCURRENCY AUCTION ARCHITECTURE</span>
+            </div>
+
+            <h1 className="landing-hero-title">
+              THE BIIIID <span className="title-gradient">FROM SYNORA</span>
+            </h1>
+
+            <p className="landing-hero-sub">
+              Experience ultra-low latency monotonic bid sequencing, sub-millisecond lock-free execution, and automated public emergency relief procurement under 5,000+ TPS concurrent load.
+            </p>
+
+            <div className="landing-cta-row">
+              <button className="btn btn-primary btn-landing" onClick={() => setActiveTab('auction')}>
+                <span>🏛️ Launch Live Auction Room</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+              <button className="btn btn-secondary btn-landing" onClick={() => setActiveTab('concurrency')}>
+                <span>⚡ 5,000 TPS Stress Lab</span>
+              </button>
+              <button className="btn btn-ghost btn-landing" onClick={() => setActiveTab('relief')}>
+                <span>🚑 Emergency Relief Exchange</span>
+              </button>
+            </div>
+          </section>
+
+          {/* Live System Highlights / Live Radar Ribbon */}
+          <div className="landing-ribbon">
+            <div className="ribbon-stat">
+              <span className="ribbon-label">ACTIVE ENGINE</span>
+              <strong className="ribbon-val" style={{ color: 'var(--emerald)' }}>{STRATEGY_DATA[strategy].title}</strong>
+            </div>
+            <div className="ribbon-stat">
+              <span className="ribbon-label">LIVE PRICE</span>
+              <strong className="ribbon-val mono" style={{ color: 'var(--cyan)' }}>${currentPrice.toLocaleString()}</strong>
+            </div>
+            <div className="ribbon-stat">
+              <span className="ribbon-label">AUTHORITATIVE SEQUENCE</span>
+              <strong className="ribbon-val mono">#{highestSeq}</strong>
+            </div>
+            <div className="ribbon-stat">
+              <span className="ribbon-label">DATABASE SYNC</span>
+              <strong className="ribbon-val" style={{ color: isSupabaseConnected ? 'var(--emerald)' : 'var(--text-mid)' }}>
+                {isSupabaseConnected ? '🟢 Supabase PostgreSQL' : '⚪ High-Speed In-Memory'}
+              </strong>
+            </div>
+          </div>
+
+          {/* Interactive Feature Bento Grid */}
+          <section className="landing-bento-grid">
+            
+            {/* Bento Card 1: Live Auction Room */}
+            <div className="bento-card bento-card-hover" onClick={() => setActiveTab('auction')}>
+              <div className="bento-top">
+                <div className="bento-icon" style={{ background: 'rgba(99, 102, 241, 0.15)', borderColor: 'rgba(99, 102, 241, 0.4)', color: 'var(--blue)' }}>🏛️</div>
+                <span className="bento-badge" style={{ background: 'rgba(99, 102, 241, 0.2)', color: '#c7d2fe' }}>FORWARD AUCTION</span>
+              </div>
+              <h3>Live Luxury Auction Room</h3>
+              <p>
+                Authoritative real-time bidding on Rare Genesis Art Token #01. Features single-writer serialization, anti-sniping dynamic timer extensions, and live price flashes.
+              </p>
+              <div className="bento-footer">
+                <span>Enter Auction Floor →</span>
+              </div>
+            </div>
+
+            {/* Bento Card 2: Concurrency & Stress Lab */}
+            <div className="bento-card bento-card-hover" onClick={() => setActiveTab('concurrency')}>
+              <div className="bento-top">
+                <div className="bento-icon" style={{ background: 'rgba(56, 189, 248, 0.15)', borderColor: 'rgba(56, 189, 248, 0.4)', color: 'var(--cyan)' }}>⚡</div>
+                <span className="bento-badge" style={{ background: 'rgba(56, 189, 248, 0.2)', color: '#bae6fd' }}>5,000 TPS ENGINE</span>
+              </div>
+              <h3>Concurrency &amp; Stress Testing Lab</h3>
+              <p>
+                Live head-to-head comparison of Naive Unsynchronized, Pessimistic Locking, Optimistic CAS, and Redis Lua Atomic Sequencer with real-time canvas throughput graphs.
+              </p>
+              <div className="bento-footer">
+                <span>Run 5,000 Burst Benchmark →</span>
+              </div>
+            </div>
+
+            {/* Bento Card 3: Relief Exchange */}
+            <div className="bento-card bento-card-hover" onClick={() => setActiveTab('relief')}>
+              <div className="bento-top">
+                <div className="bento-icon" style={{ background: 'rgba(16, 185, 129, 0.15)', borderColor: 'rgba(16, 185, 129, 0.4)', color: 'var(--emerald)' }}>🚑</div>
+                <span className="bento-badge" style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#a7f3d0' }}>REVERSE AUCTION</span>
+              </div>
+              <h3>Emergency Relief Exchange</h3>
+              <p>
+                Disaster &amp; healthcare emergency procurement mode. Verified suppliers submit bids meeting strict delivery deadlines, ISO certifications, and budget caps with atomic tie-breaking.
+              </p>
+              <div className="bento-footer">
+                <span>Explore Emergency Mode →</span>
+              </div>
+            </div>
+
+            {/* Bento Card 4: Security & Audit Ledger */}
+            <div className="bento-card bento-card-hover" onClick={() => setActiveTab('security')}>
+              <div className="bento-top">
+                <div className="bento-icon" style={{ background: 'rgba(168, 85, 247, 0.15)', borderColor: 'rgba(168, 85, 247, 0.4)', color: 'var(--purple)' }}>🛡️</div>
+                <span className="bento-badge" style={{ background: 'rgba(168, 85, 247, 0.2)', color: '#e9d5ff' }}>ZERO-TRUST</span>
+              </div>
+              <h3>Security, RBAC &amp; Immutable Ledger</h3>
+              <p>
+                Role-based access guards (Bidder, Viewer, Admin), token-bucket rate limiting against DDoS attacks, request idempotency caching, and tamper-proof sequence logs.
+              </p>
+              <div className="bento-footer">
+                <span>Inspect Audit Ledger →</span>
+              </div>
+            </div>
+
+          </section>
+
         </div>
       )}
 
