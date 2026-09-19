@@ -251,6 +251,244 @@ header {
   transform: translateY(-3px);
 }
 
+
+/* ── Interactive 3D Perspective Stage ──────────────── */
+.hero-3d-perspective-stage {
+  width: 100%;
+  max-width: 860px;
+  margin: 2rem auto 1rem;
+  perspective: 1200px;
+  cursor: grab;
+  position: relative;
+}
+
+.hero-3d-card-world {
+  width: 100%;
+  min-height: 380px;
+  background: radial-gradient(circle at 50% 40%, rgba(20, 26, 50, 0.75) 0%, rgba(6, 8, 16, 0.95) 80%);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  border-radius: var(--r-xl);
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 45px rgba(168, 85, 247, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  overflow: visible;
+}
+
+.hero-3d-ambient-glow {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) translateZ(-20px);
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, rgba(6, 182, 212, 0.2) 50%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.hero-3d-hologram-grid {
+  position: absolute;
+  bottom: 30px; left: 50%;
+  transform: translateX(-50%) rotateX(70deg) translateZ(-10px);
+  width: 80%; height: 160px;
+  background-image: 
+    linear-gradient(rgba(56, 189, 248, 0.25) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.25) 1px, transparent 1px);
+  background-size: 24px 24px;
+  border-radius: 50%;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  pointer-events: none;
+}
+
+/* 3D Gyroscopic Rings */
+.hero-3d-gyro-ring {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+.ring-outer {
+  width: 270px; height: 270px;
+  border: 1.5px dashed rgba(236, 72, 153, 0.55);
+  animation: spinRingOuter 14s linear infinite;
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.25);
+}
+
+.ring-middle {
+  width: 210px; height: 210px;
+  border: 1.5px solid rgba(168, 85, 247, 0.65);
+  animation: spinRingMiddle 10s linear infinite reverse;
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.35);
+}
+
+.ring-inner {
+  width: 150px; height: 150px;
+  border: 2px dashed rgba(6, 182, 212, 0.75);
+  animation: spinRingInner 7s linear infinite;
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.45);
+}
+
+@keyframes spinRingOuter {
+  0%   { transform: translateZ(10px) rotateX(65deg) rotateY(15deg) rotateZ(0deg); }
+  100% { transform: translateZ(10px) rotateX(65deg) rotateY(15deg) rotateZ(360deg); }
+}
+
+@keyframes spinRingMiddle {
+  0%   { transform: translateZ(20px) rotateX(55deg) rotateY(-20deg) rotateZ(0deg); }
+  100% { transform: translateZ(20px) rotateX(55deg) rotateY(-20deg) rotateZ(360deg); }
+}
+
+@keyframes spinRingInner {
+  0%   { transform: translateZ(30px) rotateX(45deg) rotateY(25deg) rotateZ(0deg); }
+  100% { transform: translateZ(30px) rotateX(45deg) rotateY(25deg) rotateZ(360deg); }
+}
+
+/* Central Floating Object */
+.hero-3d-floating-object {
+  position: relative;
+  width: 140px; height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  transform: translateZ(50px);
+  margin-bottom: 2rem;
+}
+
+.hero-3d-gem {
+  font-size: 4.8rem;
+  filter: drop-shadow(0 0 35px rgba(6, 182, 212, 0.85));
+  animation: floatGem 4s ease-in-out infinite;
+  position: absolute;
+  z-index: 2;
+}
+
+.hero-3d-gavel {
+  font-size: 3.2rem;
+  position: absolute;
+  top: -15px; right: -25px;
+  transform: rotate(25deg) translateZ(20px);
+  filter: drop-shadow(0 0 25px rgba(236, 72, 153, 0.75));
+  animation: floatGavel 5s ease-in-out infinite;
+  z-index: 3;
+}
+
+@keyframes floatGem {
+  0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
+  50%      { transform: translateY(-12px) scale(1.05) rotate(4deg); }
+}
+
+@keyframes floatGavel {
+  0%, 100% { transform: translateY(0px) rotate(25deg) translateZ(20px); }
+  50%      { transform: translateY(-14px) rotate(35deg) translateZ(35px); }
+}
+
+/* Floating Telemetry Cards */
+.hero-float-card {
+  position: absolute;
+  background: rgba(10, 15, 28, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--r-lg);
+  padding: 0.85rem 1.15rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.75), 0 0 20px rgba(0, 0, 0, 0.4);
+  transform-style: preserve-3d;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.card-top-left {
+  top: 25px; left: -20px;
+  transform: translateZ(45px);
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+.card-top-right {
+  top: 25px; right: -20px;
+  transform: translateZ(45px);
+  border-color: rgba(236, 72, 153, 0.45);
+}
+
+.card-bottom-center {
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%) translateZ(60px);
+  width: 90%;
+  max-width: 540px;
+  border-color: rgba(6, 182, 212, 0.55);
+  background: rgba(8, 12, 24, 0.96);
+}
+
+@media (max-width: 768px) {
+  .card-top-left, .card-top-right {
+    position: static;
+    transform: none;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  .card-bottom-center {
+    position: static;
+    transform: none;
+    width: 100%;
+    margin-top: 1rem;
+  }
+}
+
+.hfc-header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--text-mid);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.25rem;
+}
+
+.hfc-val {
+  font-size: 1.15rem;
+  font-weight: 800;
+  display: block;
+}
+
+.hfc-sub {
+  font-size: 0.72rem;
+  color: var(--text-lo);
+}
+
+.hfc-lot-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.btn-hero-quick-bid {
+  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--r-full);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.btn-hero-quick-bid:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.7);
+}
+
 /* ── 3D Neon Hero Composition Cards ───────────────── */
 .web3-neon-3d-grid {
   display: grid;

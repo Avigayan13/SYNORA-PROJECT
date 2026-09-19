@@ -355,6 +355,94 @@ function getBidderMeta(bidderName, seq = 1) {
   };
 }
 
+// ── 3D INTERACTIVE HERO CENTERPIECE COMPONENT ──
+function Hero3DComposition({ currentPrice, highestBidder, timeLeftSec, formattedTimer, onExplore, onBid }) {
+  const [rotate, setRotate] = useState({ x: 8, y: -8 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setRotate({ x: -y * 22, y: x * 26 });
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setRotate({ x: 8, y: -8 });
+  };
+
+  return (
+    <div 
+      className="hero-3d-perspective-stage"
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div 
+        className="hero-3d-card-world"
+        style={{
+          transform: isHovered 
+            ? `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale3d(1.02, 1.02, 1.02)` 
+            : 'rotateX(8deg) rotateY(-8deg) scale3d(1, 1, 1)'
+        }}
+      >
+        {/* Ambient Neon Backlights & Hologram Grid */}
+        <div className="hero-3d-ambient-glow" />
+        <div className="hero-3d-hologram-grid" />
+
+        {/* 3D Gyroscope Rotating Rings */}
+        <div className="hero-3d-gyro-ring ring-outer" />
+        <div className="hero-3d-gyro-ring ring-middle" />
+        <div className="hero-3d-gyro-ring ring-inner" />
+
+        {/* Central 3D Auction Floating Object */}
+        <div className="hero-3d-floating-object">
+          <div className="hero-3d-gem">💎</div>
+          <div className="hero-3d-gavel">🔨</div>
+        </div>
+
+        {/* Floating Holographic Telemetry Cards */}
+        <div className="hero-float-card card-top-left">
+          <div className="hfc-header">
+            <span className="pulse-dot" style={{ background: 'var(--emerald)' }}></span>
+            <span>SEQUENCER ENGINE</span>
+          </div>
+          <strong className="mono hfc-val" style={{ color: 'var(--emerald)' }}>5,000+ TPS</strong>
+          <span className="hfc-sub">Redis Lua Single-Writer</span>
+        </div>
+
+        <div className="hero-float-card card-top-right">
+          <div className="hfc-header">
+            <span className="pulse-dot" style={{ background: 'var(--pink)' }}></span>
+            <span>ANTI-SNIPING PROTOCOL</span>
+          </div>
+          <strong className="mono hfc-val" style={{ color: 'var(--pink)' }}>+20s Auto-Extend</strong>
+          <span className="hfc-sub">Active in Final 15s</span>
+        </div>
+
+        <div className="hero-float-card card-bottom-center">
+          <div className="hfc-lot-row">
+            <div>
+              <span className="text-muted text-xs mono">LIVE LOT #SYN-9024</span>
+              <h4 style={{ color: '#fff', fontSize: '1rem', fontWeight: 800, margin: '2px 0' }}>Rare Genesis Art Token #01</h4>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.78rem' }}>
+                <span className="mono" style={{ color: 'var(--cyan)' }}>High Bid: ${currentPrice.toLocaleString()}</span>
+                <span className="text-muted">•</span>
+                <span className="mono text-muted">⏳ {formattedTimer}</span>
+              </div>
+            </div>
+            <button className="btn-hero-quick-bid" onClick={onBid}>
+              Bid Now ⚡
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 function App() {
   // Navigation View State: 'auction' | 'concurrency' | 'relief' | 'security' | 'architecture'
   const [activeTab, setActiveTab] = useState('landing');
@@ -1683,6 +1771,16 @@ function App() {
                 <span>🚑 Relief Exchange</span>
               </button>
             </div>
+
+            {/* Interactive 3D Hero Centerpiece */}
+            <Hero3DComposition
+              currentPrice={currentPrice}
+              highestBidder={highestBidder}
+              timeLeftSec={timeLeftSec}
+              formattedTimer={formattedTimer}
+              onExplore={() => setActiveTab('auction')}
+              onBid={() => setActiveTab('auction')}
+            />
           </section>
 
           {/* 2. Large Neon 3D Hero Composition (Electric Lighting) */}
@@ -3677,6 +3775,11 @@ if (rootElement) {
   ReactDOM.createRoot(rootElement).render(<App />);
 }
 
-  </script>
+// Mount React Root
+const rootElement = document.getElementById('root');
+if (rootElement) {
+  ReactDOM.createRoot(rootElement).render(<App />);
+}
+</script>
 </body>
 </html>
