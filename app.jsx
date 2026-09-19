@@ -66,6 +66,65 @@ const RELIEF_SUPPLIERS = [
   'AirLiquide Relief Unit', 'Linde Emergency Fleet', 'MedTech Oxygen Services'
 ];
 
+// --- SUPABASE POSTGRESQL SCHEMA SCRIPT ---
+const SUPABASE_SCHEMA_SQL = `-- 1. Auctions Table
+CREATE TABLE IF NOT EXISTS public.auctions (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    current_bid BIGINT NOT NULL,
+    highest_bidder TEXT,
+    bid_count INTEGER DEFAULT 0,
+    seq_counter BIGINT DEFAULT 0,
+    ends_at TIMESTAMPTZ NOT NULL,
+    status TEXT DEFAULT 'ACTIVE',
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 2. Immutable Bids Table
+CREATE TABLE IF NOT EXISTS public.bids (
+    id BIGSERIAL PRIMARY KEY,
+    auction_id TEXT REFERENCES public.auctions(id) ON DELETE CASCADE,
+    sequence_no BIGINT NOT NULL,
+    bidder_name TEXT NOT NULL,
+    amount BIGINT NOT NULL,
+    accepted BOOLEAN DEFAULT TRUE,
+    rejection_reason TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 3. Emergency Relief Offers Table
+CREATE TABLE IF NOT EXISTS public.relief_offers (
+    id BIGSERIAL PRIMARY KEY,
+    sequence_no BIGINT NOT NULL,
+    supplier_name TEXT NOT NULL,
+    total_cost BIGINT NOT NULL,
+    quantity INTEGER NOT NULL,
+    delivery_hours NUMERIC NOT NULL,
+    certified BOOLEAN NOT NULL,
+    status TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 4. Audit Logs Table
+CREATE TABLE IF NOT EXISTS public.audit_logs (
+    id BIGSERIAL PRIMARY KEY,
+    event_type TEXT NOT NULL,
+    actor TEXT NOT NULL,
+    role TEXT NOT NULL,
+    details JSONB,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable Realtime
+ALTER PUBLICATION supabase_realtime ADD TABLE public.auctions;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.bids;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.relief_offers;
+
+-- Insert Seed Auction
+INSERT INTO public.auctions (id, title, current_bid, highest_bidder, bid_count, seq_counter, ends_at, status)
+VALUES ('SYN-9024', 'Rare Genesis Art Token #01', 10000, 'Genesis Treasury', 0, 0, NOW() + INTERVAL '2 hours', 'ACTIVE')
+ON CONFLICT (id) DO NOTHING;`;
+
 // --- STRATEGY METADATA ---
 const STRATEGY_DATA = {
   naive: {
@@ -229,6 +288,16 @@ function App() {
     seqGaps: 0
   });
   const [lastReqId, setLastReqId] = useState(null);
+
+  // Supabase PostgreSQL & Realtime State
+  const [supabaseUrl, setSupabaseUrl] = useState(() => localStorage.getItem('synora_supabase_url') || '');
+  const [supabaseAnonKey, setSupabaseAnonKey] = useState(() => localStorage.getItem('synora_supabase_key') || '');
+  const [supabaseClient, setSupabaseClient] = useState(null);
+  const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
+  const [isSupabaseModalOpen, setIsSupabaseModalOpen] = useState(false);
+  const [supabaseStatusMsg, setSupabaseStatusMsg] = useState('');
+  const [isSupabaseTesting, setIsSupabaseTesting] = useState(false);
+  const [copiedSql, setCopiedSql] = useState(false);
 
   // ═══════════════════════════════════════════════════════════════════
   // RELIEF EXCHANGE (EMERGENCY PROCUREMENT MODE) STATE
@@ -436,7 +505,36 @@ function App() {
       status: outcome,
       reason: reason
     }, ...prev.slice(0, 75)]);
-  }, [flashPrice, handleAntiSniping]);
+
+    // Supabase PostgreSQL Real-Time Sync
+    if (supabaseClient && isSupabaseConnected) {
+      try {
+        const seqToSave = bid.seq || liveRef.current.highestSeq;
+        supabaseClient.from('bids').insert([{
+          auction_id: 'SYN-9024',
+          sequence_no: seqToSave,
+          bidder_name: bid.bidder,
+          amount: Math.round(bid.amount),
+          accepted: outcome === 'ACCEPTED',
+          rejection_reason: outcome !== 'ACCEPTED' ? reason : null
+        }]).then();
+
+        if (outcome === 'ACCEPTED') {
+          supabaseClient.from('auctions').upsert({
+            id: 'SYN-9024',
+            title: 'Rare Genesis Art Token #01',
+            current_bid: Math.round(bid.amount),
+            highest_bidder: bid.bidder,
+            seq_counter: seqToSave,
+            ends_at: new Date(Date.now() + liveRef.current.timeLeftSec * 1000).toISOString(),
+            status: 'ACTIVE'
+          }).then();
+        }
+      } catch (err) {
+        console.warn('Supabase bid write error:', err);
+      }
+    }
+  }, [flashPrice, handleAntiSniping, supabaseClient, isSupabaseConnected]);
 
   // Dispatch Bid through Active Concurrency Engine (Forward Auction)
   const dispatchBid = useCallback(async (rawBid) => {
@@ -839,8 +937,25 @@ function App() {
         : `OFFER_REJECTED: ${rejectionReason}`
     }, ...prev.slice(0, 100)]);
 
+    // Supabase Sync for Relief Offers
+    if (supabaseClient && isSupabaseConnected) {
+      try {
+        supabaseClient.from('relief_offers').insert([{
+          sequence_no: assignedSeq,
+          supplier_name: supplier,
+          total_cost: Math.round(totalCost),
+          quantity: Math.round(qty),
+          delivery_hours: parseFloat(delivery),
+          certified: !!cert,
+          status: status
+        }]).then();
+      } catch (e) {
+        console.warn('Supabase relief offer write error:', e);
+      }
+    }
+
     return evaluatedOffer;
-  }, [triggerSecToast]);
+  }, [triggerSecToast, supabaseClient, isSupabaseConnected]);
 
   // Finalize & Award Emergency Contract
   const awardReliefContract = useCallback(() => {
@@ -1161,6 +1276,107 @@ function App() {
     return `${String(mins).padStart(2, '0')}:${secs}`;
   }, [timeLeftSec]);
 
+  // Supabase Database Connection Handler
+  const connectSupabase = useCallback(async (url, key) => {
+    if (!url || !key) {
+      setSupabaseStatusMsg('Please enter both Supabase Project URL and Anon Key.');
+      return false;
+    }
+    if (!window.supabase || !window.supabase.createClient) {
+      setSupabaseStatusMsg('Supabase SDK not loaded in browser.');
+      return false;
+    }
+
+    setIsSupabaseTesting(true);
+    setSupabaseStatusMsg('Connecting to Supabase...');
+    try {
+      const client = window.supabase.createClient(url.trim(), key.trim());
+      const { data, error } = await client.from('auctions').select('*').limit(1);
+      if (error && error.code !== 'PGRST116') {
+        if (error.message && error.message.includes('relation "public.auctions" does not exist')) {
+          setSupabaseStatusMsg('Connected to Supabase! (Notice: Please run the SQL schema script to create tables).');
+        } else {
+          throw error;
+        }
+      } else {
+        setSupabaseStatusMsg('✓ Connected to Supabase PostgreSQL & Realtime!');
+        if (data && data.length > 0) {
+          const auc = data[0];
+          if (Number(auc.current_bid) > liveRef.current.currentPrice) {
+            liveRef.current.currentPrice = Number(auc.current_bid);
+            liveRef.current.highestSeq = Number(auc.seq_counter || 0);
+            setCurrentPrice(Number(auc.current_bid));
+            setHighestBidder(auc.highest_bidder || 'Supabase Genesis');
+            setHighestSeq(Number(auc.seq_counter || 0));
+          }
+        }
+      }
+
+      setSupabaseClient(client);
+      setIsSupabaseConnected(true);
+      localStorage.setItem('synora_supabase_url', url.trim());
+      localStorage.setItem('synora_supabase_key', key.trim());
+      triggerSecToast('Connected to Supabase PostgreSQL Database', 'ok');
+      return true;
+    } catch (err) {
+      console.error('Supabase connection failed:', err);
+      setIsSupabaseConnected(false);
+      setSupabaseStatusMsg('Connection failed: ' + (err.message || 'Check URL and anon key'));
+      return false;
+    } finally {
+      setIsSupabaseTesting(false);
+    }
+  }, [triggerSecToast]);
+
+  const disconnectSupabase = useCallback(() => {
+    setSupabaseClient(null);
+    setIsSupabaseConnected(false);
+    localStorage.removeItem('synora_supabase_url');
+    localStorage.removeItem('synora_supabase_key');
+    setSupabaseStatusMsg('Disconnected from Supabase.');
+    triggerSecToast('Disconnected from Supabase database. Local in-memory mode active.', 'warn');
+  }, [triggerSecToast]);
+
+  // Auto-connect if credentials exist in localStorage
+  useEffect(() => {
+    const savedUrl = localStorage.getItem('synora_supabase_url');
+    const savedKey = localStorage.getItem('synora_supabase_key');
+    if (savedUrl && savedKey) {
+      connectSupabase(savedUrl, savedKey);
+    }
+  }, [connectSupabase]);
+
+  // Realtime Supabase Channel Subscription
+  useEffect(() => {
+    if (!supabaseClient || !isSupabaseConnected) return;
+
+    try {
+      const channel = supabaseClient
+        .channel('synora-realtime-bids')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'bids' }, payload => {
+          const newBid = payload.new;
+          if (newBid && newBid.accepted) {
+            if (Number(newBid.sequence_no) > liveRef.current.highestSeq) {
+              liveRef.current.highestSeq = Number(newBid.sequence_no);
+              liveRef.current.currentPrice = Number(newBid.amount);
+              setHighestSeq(Number(newBid.sequence_no));
+              setCurrentPrice(Number(newBid.amount));
+              setHighestBidder(newBid.bidder_name);
+              flashPrice('success');
+              playSound(true, false);
+            }
+          }
+        })
+        .subscribe();
+
+      return () => {
+        supabaseClient.removeChannel(channel);
+      };
+    } catch (e) {
+      console.warn('Realtime channel error:', e);
+    }
+  }, [supabaseClient, isSupabaseConnected, flashPrice]);
+
   // ═══════════════════════════════════════════════════════════════════════
   // JSX RENDERING
   // ═══════════════════════════════════════════════════════════════════════
@@ -1184,6 +1400,14 @@ function App() {
               <span className="pulse-dot" aria-hidden="true"></span>
               <span className="sys-status-text">{STRATEGY_DATA[strategy].statusLabel}</span>
             </div>
+            <button
+              className={`supabase-status-pill ${isSupabaseConnected ? 'connected' : ''}`}
+              onClick={() => setIsSupabaseModalOpen(true)}
+              title="Configure Supabase PostgreSQL database connection & Realtime sync"
+            >
+              <span className="supabase-dot"></span>
+              <span>{isSupabaseConnected ? '⚡ Supabase DB: Live' : '🔌 Supabase DB'}</span>
+            </button>
             <button
               className="btn btn-sm btn-ghost"
               onClick={resetSimulation}
@@ -2684,6 +2908,117 @@ function App() {
         </div>
       )}
 
+      {/* ── SUPABASE CONFIGURATION & SCHEMA MODAL ── */}
+      {isSupabaseModalOpen && (
+        <div className="supabase-modal-backdrop" onClick={() => setIsSupabaseModalOpen(false)}>
+          <div className="supabase-modal" onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-hi)', margin: 0 }}>
+                  🔌 Supabase Database Integration
+                </h3>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-mid)', marginTop: '0.2rem' }}>
+                  Connect your live Supabase PostgreSQL instance for persistent ledger storage and multi-client Realtime sync.
+                </p>
+              </div>
+              <button
+                className="btn btn-sm btn-ghost"
+                onClick={() => setIsSupabaseModalOpen(false)}
+                style={{ fontSize: '1.1rem', padding: '0.2rem 0.5rem' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Connection Status Banner */}
+            <div style={{
+              padding: '0.75rem 1rem',
+              borderRadius: 'var(--r-md)',
+              background: isSupabaseConnected ? '#edf7f1' : '#f8f9fc',
+              border: `1px solid ${isSupabaseConnected ? '#a8d4ba' : 'var(--border)'}`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span className="supabase-dot" style={{ background: isSupabaseConnected ? '#10b981' : '#94a3b8', width: '9px', height: '9px' }}></span>
+                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: isSupabaseConnected ? '#1b4332' : 'var(--text-mid)' }}>
+                  {isSupabaseConnected ? 'Connected to Supabase PostgreSQL & Realtime' : (supabaseStatusMsg || 'Local In-Memory Mode (Disconnected)')}
+                </span>
+              </div>
+              {isSupabaseConnected && (
+                <button className="btn btn-sm btn-danger" onClick={disconnectSupabase} style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem' }}>
+                  Disconnect
+                </button>
+              )}
+            </div>
+
+            {/* API Credentials Input Form */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-mid)', marginBottom: '0.3rem' }}>
+                  Supabase Project URL
+                </label>
+                <input
+                  type="text"
+                  className="offer-input"
+                  style={{ width: '100%' }}
+                  placeholder="https://your-project-id.supabase.co"
+                  value={supabaseUrl}
+                  onChange={e => setSupabaseUrl(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-mid)', marginBottom: '0.3rem' }}>
+                  Supabase Anon / Public API Key
+                </label>
+                <input
+                  type="password"
+                  className="offer-input"
+                  style={{ width: '100%' }}
+                  placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  value={supabaseAnonKey}
+                  onChange={e => setSupabaseAnonKey(e.target.value)}
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.3rem' }}>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => connectSupabase(supabaseUrl, supabaseAnonKey)}
+                  disabled={isSupabaseTesting}
+                  style={{ flex: 1 }}
+                >
+                  {isSupabaseTesting ? 'Connecting...' : (isSupabaseConnected ? 'Update Connection' : 'Connect to Supabase')}
+                </button>
+              </div>
+            </div>
+
+            {/* SQL Schema Script Section */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-hi)' }}>
+                  SQL Schema Setup (Copy &amp; Run in Supabase SQL Editor)
+                </span>
+                <button
+                  className="btn btn-sm btn-secondary"
+                  onClick={() => {
+                    navigator.clipboard.writeText(SUPABASE_SCHEMA_SQL);
+                    setCopiedSql(true);
+                    setTimeout(() => setCopiedSql(false), 2500);
+                  }}
+                  style={{ fontSize: '0.72rem', padding: '0.2rem 0.5rem' }}
+                >
+                  {copiedSql ? '✓ Copied to Clipboard!' : '📋 Copy SQL Script'}
+                </button>
+              </div>
+              <pre className="supabase-sql-snippet">{SUPABASE_SCHEMA_SQL}</pre>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── FOOTER ── */}
       <footer className="site-footer" role="contentinfo">
         <div className="footer-inner">
@@ -2691,7 +3026,7 @@ function App() {
             <strong>THE BIIIID</strong> FROM SYNORA — Professional Real-Time Auction, Security &amp; Emergency Relief Platform.
           </span>
           <span className="text-muted text-xs">
-            Tech Stack: React 18 · Go / Node.js · Redis Lua Sequencer · PostgreSQL · Kafka · k6
+            Tech Stack: React 18 · Supabase PostgreSQL · Redis Lua Sequencer · WebSockets · k6
           </span>
         </div>
       </footer>
