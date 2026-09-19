@@ -2739,3 +2739,198 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
   transform: translateY(-3px) !important;
   transition: transform 0.15s ease, border-color 0.15s ease !important;
 }
+
+
+/* ═══════════════════════════════════════════════════════
+   GPU HARDWARE-ACCELERATED 60FPS EFFECT SYSTEM
+   All visual animations & glows powered by Compositor Thread
+═══════════════════════════════════════════════════════ */
+
+/* ── 1. Flowing Cyber Gradient Title ───────────────── */
+@keyframes cyberGradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.brand-biiiid, .title-gradient {
+  background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc, #f43f5e, #38bdf8) !important;
+  background-size: 250% 250% !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: cyberGradientShift 5s ease infinite !important;
+  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.45)) !important;
+  will-change: background-position;
+}
+
+/* ── 2. GPU-Accelerated Floating Ambient Aurora Mesh ── */
+.landing-ambient-orbs {
+  display: block !important;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.landing-orb {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.4;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  animation: gpuOrbFloat 12s ease-in-out infinite alternate;
+}
+
+.orb-1 {
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.45) 0%, rgba(99, 102, 241, 0.1) 40%, transparent 70%);
+  top: -80px; left: 12%;
+}
+
+.orb-2 {
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.4) 0%, rgba(56, 189, 248, 0.1) 40%, transparent 70%);
+  top: 180px; right: 8%;
+  animation-duration: 16s;
+  animation-delay: -3s;
+}
+
+.orb-3 {
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, rgba(168, 85, 247, 0.08) 40%, transparent 70%);
+  bottom: 80px; left: 35%;
+  animation-duration: 14s;
+  animation-delay: -6s;
+}
+
+@keyframes gpuOrbFloat {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(30px, -25px, 0) scale(1.06); }
+  100% { transform: translate3d(-25px, 30px, 0) scale(0.96); }
+}
+
+/* ── 3. Ultra-Smooth GPU Card Shimmer Light Reflection ─ */
+@keyframes gpuShimmer {
+  0%   { transform: translate3d(-180%, 0, 0) rotate(30deg); }
+  30%  { transform: translate3d(220%, 0, 0) rotate(30deg); }
+  100% { transform: translate3d(220%, 0, 0) rotate(30deg); }
+}
+
+.grand-price-card, .bento-card, .lot-hero-card {
+  position: relative;
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.grand-price-card::after, .bento-card::after {
+  content: '';
+  position: absolute;
+  top: -60%; left: -60%;
+  width: 220%; height: 220%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.02) 42%,
+    rgba(255, 255, 255, 0.10) 50%,
+    rgba(255, 255, 255, 0.02) 58%,
+    transparent 100%
+  );
+  transform: translate3d(-180%, 0, 0) rotate(30deg);
+  animation: gpuShimmer 6.5s infinite ease-in-out;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ── 4. 3D Floating Token Animation ────────────────── */
+@keyframes gpuFloat3D {
+  0%   { transform: translate3d(0, 0px, 0) rotate(0deg); }
+  50%  { transform: translate3d(0, -10px, 0) rotate(2.5deg) scale(1.04); }
+  100% { transform: translate3d(0, 0px, 0) rotate(0deg); }
+}
+
+.lot-token-icon, .lot-stage-icon, .bento-icon {
+  animation: gpuFloat3D 3.8s ease-in-out infinite !important;
+  display: inline-block;
+  will-change: transform;
+}
+
+/* ── 5. Live Radar Pulsing Ring ────────────────────── */
+@keyframes gpuRadar {
+  0%   { transform: scale(0.95); opacity: 0.9; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
+  60%  { transform: scale(1.05); opacity: 1; box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); opacity: 0.9; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.pulse-dot {
+  animation: gpuRadar 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+  will-change: transform, box-shadow;
+}
+
+/* ── 6. Continuous Kinetic Live Marquee ─────────────── */
+@keyframes gpuMarquee {
+  0%   { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+.ticker-marquee-wrap {
+  width: 100%;
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.5rem 0;
+  display: flex;
+  white-space: nowrap;
+}
+
+.ticker-marquee-content {
+  display: inline-flex;
+  gap: 2.5rem;
+  animation: gpuMarquee 26s linear infinite;
+  will-change: transform;
+}
+
+/* ── 7. Butter-Smooth Feature Opening Transitions ──── */
+@keyframes smoothPortalIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.view-container, .landing-view-container {
+  animation: smoothPortalIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  will-change: transform, opacity;
+}
+
+/* ── 8. Smooth Bento Card Hover Lift ───────────────── */
+.bento-card, .strategy-card, .kpi-card, .feature-hero-banner {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease !important;
+  will-change: transform, box-shadow;
+}
+
+.bento-card:hover {
+  transform: translate3d(0, -4px, 0) !important;
+  border-color: rgba(168, 85, 247, 0.5) !important;
+  box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.7), 0 0 20px rgba(129, 140, 248, 0.2) !important;
+}
+
+.btn-primary:hover, .btn-danger:hover {
+  transform: translate3d(0, -2px, 0) !important;
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.6) !important;
+}
+
+/* ── 9. Active Nav Tab Neon Pulse ──────────────────── */
+.nav-tab.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.4)) !important;
+  border-color: rgba(168, 85, 247, 0.6) !important;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.35) !important;
+}
