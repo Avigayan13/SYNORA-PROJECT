@@ -254,19 +254,76 @@ const BOT_METADATA = {
   'NexusBidder': { node: 'Seoul KR1 Gateway', wallet: '0x9900...1122', kyc: 'Tier-1 Institutional' },
 };
 
-function getBidderMeta(bidderName) {
+// Deterministic Hash Generator for Unique Bidder Credentials
+function hashStr(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
+function getBidderMeta(bidderName, seq = 1) {
+  const seed = hashStr(bidderName + "_" + seq);
+  const keyId = "IDP_" + seed.toString(16).toUpperCase().padStart(8, '0').substr(0, 8);
+  const sigHash = "0x" + ((seed * 7919) % 0xFFFFFFFFFFFF).toString(16).padStart(12, '0').toUpperCase();
+  const traderId = "TRD-" + (1000 + (seed % 9000));
+  const escrowVal = 100000 + (seed % 900000);
+  const ip = `${104 + (seed % 50)}.${(seed >> 4) % 255}.${(seed >> 8) % 255}.${1 + (seed % 250)}`;
+
   if (bidderName.includes('You') || bidderName.includes('Alex')) {
-    return { node: 'AWS ap-south-1 (Mumbai Gateway)', wallet: '0x7F3A...9C1D', kyc: 'Tier-1 KYC Verified (You)' };
+    return {
+      keyId: "IDP_USER_AUTH",
+      traderId: "TRD-8892 (You)",
+      node: "AWS ap-south-1 (Mumbai Gateway)",
+      wallet: "0x7F3A...9C1D",
+      kyc: "Tier-1 KYC Verified (You)",
+      escrow: "$500,000 (Escrow Locked)",
+      protocol: "WSS / TCP Binary Stream",
+      ip: "103.21.244.12 [Direct Gate]",
+      sigHash: "0x9F4C2A1E8D90"
+    };
   }
   if (bidderName.includes('Genesis')) {
-    return { node: 'Genesis Master Custody Node', wallet: '0x9024...ETH1', kyc: 'Treasury Reserve' };
+    return {
+      keyId: "IDP_GENESIS_ROOT",
+      traderId: "TRD-0001 (Genesis)",
+      node: "Genesis Master Custody Node",
+      wallet: "0x9024...ETH1",
+      kyc: "Treasury Reserve",
+      escrow: "$10,000,000 Verified",
+      protocol: "Genesis Internal Bus",
+      ip: "10.0.0.1 [Internal]",
+      sigHash: "0x000000000000"
+    };
   }
   for (const key of Object.keys(BOT_METADATA)) {
     if (bidderName.includes(key)) {
-      return BOT_METADATA[key];
+      return {
+        keyId,
+        traderId,
+        node: BOT_METADATA[key].node,
+        wallet: BOT_METADATA[key].wallet,
+        kyc: BOT_METADATA[key].kyc,
+        escrow: "$" + escrowVal.toLocaleString() + " (Escrow Verified)",
+        protocol: "FIX / High-Speed TCP",
+        ip: ip + " [Edge Cross-Connect]",
+        sigHash
+      };
     }
   }
-  return { node: 'Global Edge Node #12', wallet: '0x' + Math.random().toString(16).substr(2, 8).toUpperCase() + '...', kyc: 'Verified Trader' };
+  return {
+    keyId,
+    traderId,
+    node: "Global Edge Node #" + (1 + (seed % 30)),
+    wallet: "0x" + seed.toString(16).substr(0, 8).toUpperCase() + "...",
+    kyc: "Verified Trader",
+    escrow: "$" + escrowVal.toLocaleString() + " Verified",
+    protocol: "WebSocket Stream v2.4",
+    ip: ip,
+    sigHash
+  };
 }
 
 function App() {
@@ -1797,12 +1854,16 @@ function App() {
                               <strong style={{ color: '#fff', fontSize: '0.85rem' }}>{item.bidder}</strong>
                               <span className="bidder-kyc-chip">✓ {meta.kyc.split(' ')[0]}</span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.7rem', color: 'var(--text-lo)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.7rem', color: 'var(--text-lo)', flexWrap: 'wrap' }}>
+                              <span className="mono text-amber" style={{ fontWeight: 700 }}>{meta.keyId}</span>
+                              <span>•</span>
+                              <span className="mono text-blue">{meta.traderId}</span>
+                              <span>•</span>
                               <span>🌐 {meta.node}</span>
                               <span>•</span>
-                              <span className="mono">{meta.wallet}</span>
-                              <span>•</span>
                               <span className="mono text-cyan">{item.latency.toFixed(1)}ms</span>
+                              <span>•</span>
+                              <span className="mono" style={{ color: 'var(--purple)' }}>{meta.sigHash}</span>
                             </div>
                           </div>
                           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.2rem' }}>
@@ -1842,23 +1903,39 @@ function App() {
                     <span className="mono text-muted text-xs">Sequence Token: #{highestSeq}</span>
                   </div>
 
-                  {/* Rich Leading Bidder Verification Passport */}
+                  {/* Institutional Trader Passport & Cryptographic Credentials */}
                   <div className="bidder-passport-card">
                     <div className="bp-row">
-                      <span className="bp-label">KYC STATUS</span>
-                      <span className="bp-val" style={{ color: 'var(--emerald)' }}>✓ {getBidderMeta(highestBidder).kyc}</span>
+                      <span className="bp-label">UNIQUE KEY ID (IDEMPOTENCY)</span>
+                      <span className="bp-val mono" style={{ color: 'var(--amber)' }}>{getBidderMeta(highestBidder, highestSeq).keyId}</span>
                     </div>
                     <div className="bp-row">
-                      <span className="bp-label">NODE GATEWAY</span>
-                      <span className="bp-val mono">{getBidderMeta(highestBidder).node}</span>
+                      <span className="bp-label">TRADER IDENTIFIER</span>
+                      <span className="bp-val mono" style={{ color: 'var(--cyan)' }}>{getBidderMeta(highestBidder, highestSeq).traderId}</span>
                     </div>
                     <div className="bp-row">
-                      <span className="bp-label">ACCOUNT WALLET</span>
-                      <span className="bp-val mono" style={{ color: 'var(--blue)' }}>{getBidderMeta(highestBidder).wallet}</span>
+                      <span className="bp-label">KYC VERIFICATION TIER</span>
+                      <span className="bp-val" style={{ color: 'var(--emerald)' }}>✓ {getBidderMeta(highestBidder, highestSeq).kyc}</span>
                     </div>
                     <div className="bp-row">
-                      <span className="bp-label">LATENCY / SPEED</span>
-                      <span className="bp-val mono" style={{ color: 'var(--cyan)' }}>0.4 ms (Zero DB Contention)</span>
+                      <span className="bp-label">COLLATERAL ESCROW</span>
+                      <span className="bp-val mono" style={{ color: '#fff' }}>{getBidderMeta(highestBidder, highestSeq).escrow}</span>
+                    </div>
+                    <div className="bp-row">
+                      <span className="bp-label">CRYPTO WALLET HASH</span>
+                      <span className="bp-val mono" style={{ color: 'var(--blue)' }}>{getBidderMeta(highestBidder, highestSeq).wallet}</span>
+                    </div>
+                    <div className="bp-row">
+                      <span className="bp-label">ECDSA SIGNATURE HASH</span>
+                      <span className="bp-val mono" style={{ color: 'var(--purple)' }}>{getBidderMeta(highestBidder, highestSeq).sigHash}</span>
+                    </div>
+                    <div className="bp-row">
+                      <span className="bp-label">NODE GATEWAY ROUTE</span>
+                      <span className="bp-val mono">{getBidderMeta(highestBidder, highestSeq).node}</span>
+                    </div>
+                    <div className="bp-row">
+                      <span className="bp-label">IP &amp; PROTOCOL</span>
+                      <span className="bp-val mono text-lo" style={{ fontSize: '0.72rem' }}>{getBidderMeta(highestBidder, highestSeq).protocol} • {getBidderMeta(highestBidder, highestSeq).ip}</span>
                     </div>
                   </div>
                 </div>
