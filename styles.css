@@ -8,7 +8,7 @@
   /* Backgrounds — Deep Obsidian & Cyber Glass */
   --bg-base:      #080b14;
   --bg-surface:   #0e1424;
-  --bg-card:      rgba(15, 23, 42, 0.75);
+  --bg-card:      #101726;
   --bg-card-alt:  rgba(30, 41, 59, 0.60);
   --bg-input:     rgba(11, 17, 32, 0.85);
 
@@ -105,9 +105,9 @@ body {
 ══════════════════════════════════════════════════════ */
 header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(8, 11, 20, 0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: #080b12;
+  
+  
   border-bottom: 1px solid var(--border);
 }
 .header-inner {
@@ -315,7 +315,7 @@ header {
 .auction-timer-badge {
   position: absolute; bottom: 8px; right: 8px; z-index: 3;
   display: inline-flex; align-items: center; gap: 0.3rem;
-  background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-dark);
+  background: var(--bg-card);   border: 1px solid var(--border-dark);
   color: var(--rose); padding: 0.22rem 0.55rem;
   border-radius: var(--r-sm); font-size: 0.78rem; font-weight: 700;
   font-family: var(--font-mono);
@@ -749,9 +749,9 @@ header {
 
 .sec-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(8, 11, 20, 0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: #080b12;
+  
+  
   border-bottom: 1px solid var(--border);
 }
 .sec-header-left { display: flex; align-items: center; gap: 0.85rem; }
@@ -846,9 +846,9 @@ header {
 .perm-row:last-child { border-bottom: none; }
 .perm-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(8, 11, 20, 0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: #080b12;
+  
+  
   border-bottom: 1px solid var(--border);
 }
 .perm-row > span:not(:first-child) { text-align: center; }
@@ -955,9 +955,9 @@ header {
 }
 .idem-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(8, 11, 20, 0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: #080b12;
+  
+  
   border-bottom: 1px solid var(--border);
 }
 .idem-req-row { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; }
@@ -1115,7 +1115,7 @@ header {
 }
 
 .nav-tab.active {
-  background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: var(--bg-card);  
   color: var(--blue);
   border-color: var(--border-dark);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
@@ -1165,9 +1165,9 @@ header {
 
 .view-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(8, 11, 20, 0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: #080b12;
+  
+  
   border-bottom: 1px solid var(--border);
 }
 
@@ -1203,7 +1203,7 @@ header {
 }
 
 .lot-hero-card {
-  background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: var(--bg-card);  
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   padding: 1.75rem;
@@ -1271,7 +1271,7 @@ header {
   align-items: center;
   gap: 0.4rem;
   background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(4px);
+  
   border: 1px solid var(--border);
   padding: 0.25rem 0.65rem;
   border-radius: var(--r-sm);
@@ -1334,7 +1334,7 @@ header {
 
 /* Bidding Console Column */
 .bidding-console-card {
-  background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: var(--bg-card);  
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   padding: 1.75rem;
@@ -1354,7 +1354,7 @@ header {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: var(--bg-card);  
   border: 1px solid var(--border-dark);
   padding: 0.35rem 0.8rem;
   border-radius: var(--r-md);
@@ -1459,7 +1459,7 @@ header {
 }
 
 .stream-card {
-  background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: var(--bg-card);  
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   padding: 1.35rem;
@@ -1482,7 +1482,7 @@ header {
 }
 
 .arch-feature-card {
-  background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: var(--bg-card);  
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   padding: 1.4rem;
@@ -1519,7 +1519,7 @@ header {
    SYNORA RELIEF EXCHANGE — EMERGENCY PROCUREMENT MODE
 ══════════════════════════════════════════════════════ */
 .relief-hero-card {
-  background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: var(--bg-card);  
   border: 1px solid var(--border);
   border-left: 4px solid var(--rose);
   border-radius: var(--r-lg);
@@ -1635,7 +1635,7 @@ header {
 
 /* Reverse Auction Offer Console */
 .offer-console-card {
-  background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: var(--bg-card);  
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   padding: 1.75rem;
@@ -1718,7 +1718,7 @@ header {
 }
 
 .btn-quick-offer {
-  background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: var(--bg-card);  
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
   padding: 0.6rem 0.85rem;
@@ -1737,9 +1737,9 @@ header {
 
 .quick-offer-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(8, 11, 20, 0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: #080b12;
+  
+  
   border-bottom: 1px solid var(--border);
 }
 
@@ -1751,7 +1751,7 @@ header {
 
 /* Best Eligible Offer & Contract Awarded */
 .best-offer-card {
-  background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: var(--bg-card);  
   border: 1.5px solid #a8d4ba;
   border-radius: var(--r-lg);
   padding: 1.75rem;
@@ -1827,7 +1827,7 @@ header {
 }
 
 .contract-award-card {
-  background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: var(--bg-card);  
   border: 2px solid var(--emerald);
   border-radius: var(--r-lg);
   padding: 1.6rem;
@@ -1839,9 +1839,9 @@ header {
 
 .contract-award-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(8, 11, 20, 0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: #080b12;
+  
+  
   border-bottom: 1px solid var(--border);
 }
 
@@ -2037,8 +2037,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(4px);
+  background: #0e1422;
+  
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -2047,7 +2047,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 }
 
 .supabase-modal {
-  background: var(--bg-card); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: var(--bg-card);  
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-modal);
@@ -2097,7 +2097,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 }
 
 /* ── Floating Ambient Gradient Orbs ─────────────────── */
-.landing-ambient-orbs {
+.landing-ambient-orbs { display: none;
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none;
@@ -2108,7 +2108,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 .landing-orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
+  
   opacity: 0.35;
   animation: orbFloat 14s ease-in-out infinite alternate;
 }
@@ -2161,7 +2161,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
   gap: 0.5rem;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(10px);
+  
   padding: 0.35rem 0.9rem;
   border-radius: var(--r-full);
   font-size: 0.7rem;
@@ -2213,8 +2213,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 .landing-ribbon {
   position: relative;
   z-index: 1;
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(16px);
+  background: #0e1422;
+  
   border: 1px solid var(--border);
   border-radius: var(--r-xl);
   padding: 1.25rem 2rem;
@@ -2254,8 +2254,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 }
 
 .bento-card {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(16px);
+  background: #101726;
+  
   border: 1px solid var(--border);
   border-radius: var(--r-xl);
   padding: 1.75rem;
@@ -2354,8 +2354,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 }
 
 /* ── 3. Shimmer Sweep Reflection on Cards ───────────── */
-@keyframes shimmerLight {
-  0%   { transform: translateX(-150%) rotate(35deg); }
+
   35%  { transform: translateX(250%) rotate(35deg); }
   100% { transform: translateX(250%) rotate(35deg); }
 }
@@ -2365,23 +2364,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
   overflow: hidden;
 }
 
-.grand-price-card::after, .bento-card::after {
-  content: '';
-  position: absolute;
-  top: -50%; left: -50%;
-  width: 200%; height: 200%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.03) 40%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.03) 60%,
-    transparent 100%
-  );
-  transform: rotate(35deg);
-  animation: shimmerLight 7s infinite ease-in-out;
-  pointer-events: none;
-}
+
 
 /* ── 4. Glowing Live Pulsing Radar Rings ────────────── */
 @keyframes radarPing {
@@ -2403,7 +2386,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 .ticker-marquee-wrap {
   width: 100%;
   overflow: hidden;
-  background: rgba(15, 23, 42, 0.85);
+  background: #0f1422;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   padding: 0.5rem 0;
@@ -2496,17 +2479,17 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
   0% {
     opacity: 0;
     transform: scale(0.96) translateY(24px);
-    filter: blur(8px);
+    
   }
   60% {
     opacity: 1;
     transform: scale(1.008) translateY(-3px);
-    filter: blur(0px);
+    
   }
   100% {
     opacity: 1;
     transform: scale(1) translateY(0);
-    filter: blur(0px);
+    
   }
 }
 
@@ -2577,8 +2560,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 }
 
 /* ── 4. Rotating Holographic Neon Border on Highlight Cards ── */
-@keyframes neonBorderRotate {
-  0%   { filter: hue-rotate(0deg); }
+
   100% { filter: hue-rotate(360deg); }
 }
 
@@ -2634,9 +2616,9 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 }
 
 .feature-hero-banner {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: #101726;
+  
+  
   border: 1px solid var(--border);
   border-radius: var(--r-xl);
   padding: 2.25rem 2.5rem;
@@ -2716,4 +2698,44 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 
 .strategy-grid {
   gap: 1.25rem !important;
+}
+
+
+/* ══════════════════════════════════════════════════════
+   HIGH-PERFORMANCE 60FPS HARDWARE ACCELERATION
+══════════════════════════════════════════════════════ */
+* {
+  box-sizing: border-box;
+}
+
+.card, .bento-card, .btn, .nav-tab, .strategy-card, .kpi-card {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.view-container, .landing-view-container {
+  animation: none !important;
+}
+
+.auction-room-grid > div,
+.kpi-grid > .kpi-card,
+.strategy-grid > .strategy-card,
+.provenance-grid > .provenance-item,
+.sec-card,
+.arch-feature-card {
+  animation: none !important;
+}
+
+.grand-price-card {
+  animation: none !important;
+}
+
+.btn:hover {
+  transform: translateY(-1px) !important;
+  transition: transform 0.12s ease !important;
+}
+
+.bento-card:hover {
+  transform: translateY(-3px) !important;
+  transition: transform 0.15s ease, border-color 0.15s ease !important;
 }

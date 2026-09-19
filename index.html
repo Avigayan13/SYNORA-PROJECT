@@ -1170,9 +1170,10 @@ function App() {
     return () => clearInterval(rlInterval);
   }, []);
 
-  // Canvas Telemetry Chart Loop (Forward Auction)
+  // Canvas Telemetry Chart Loop (Forward Auction) - Only runs when tab is active
   const canvasRef = useRef(null);
   useEffect(() => {
+    if (activeTab !== 'concurrency') return;
     let animationFrameId;
     const canvas = canvasRef.current;
     if (!canvas) return;
