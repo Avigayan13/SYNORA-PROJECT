@@ -1,4 +1,4 @@
-# SYNORA | Real-Time Bidding & Auction System Under Load
+# BIDEC | Real-Time Bidding & Auction System Under Load
 
 > **Problem Statement 02**: Architect a high-throughput transactional auction system ensuring valid bid serialization under heavy concurrent loads.
 
@@ -10,7 +10,7 @@ High-concurrency financial trading and real-time auction platforms face extreme 
 
 A naive database approach (`SELECT ... UPDATE`) fails because concurrent transactions read stale price states, resulting in **lost updates**, **ghost bids**, and **out-of-order acceptances**. Conversely, naive row locking (`SELECT ... FOR UPDATE`) leads to **severe lock contention**, transaction queue backlog, connection pool exhaustion, and latency spikes.
 
-**SYNORA solves this using a decoupled High-Performance Architecture**:
+**BIDEC solves this using a decoupled High-Performance Architecture**:
 1. **Fast-Path In-Memory Atomic Sequencer** (Redis Lua script / LMAX Disruptor single-writer channel) that validates and assigns monotonic sequence IDs in $< 1\text{ms}$.
 2. **Asynchronous Write-Behind Persistence** (Transactional Outbox / PostgreSQL WAL) ensuring ACID persistence without blocking the real-time bid ingest path.
 3. **Decoupled Real-Time Broadcast Fabric** (Redis Pub/Sub -> WebSocket Gateway) pushing price delta events to thousands of connected clients in sub-50ms.
