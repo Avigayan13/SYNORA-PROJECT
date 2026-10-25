@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ SYNORA
+# ⚡ BIDECC
 
 ### A cinematic real-time auction experience, built to make concurrency visible.
 
@@ -15,9 +15,9 @@
 
 ---
 
-## ✨ What is SYNORA?
+## ✨ What is BIDECC?
 
-SYNORA is an interactive front-end laboratory for exploring the difficult part of real-time auctions: accepting the right bid, in the right order, when everyone bids at once. It pairs a premium auction interface with live concurrency simulations, visual telemetry, and a transparent audit trail.
+BIDECC is an interactive front-end laboratory for exploring the difficult part of real-time auctions: accepting the right bid, in the right order, when everyone bids at once. It pairs a premium auction interface with live concurrency simulations, visual telemetry, and a transparent audit trail.
 
 It also includes **Relief Exchange** — a reverse-auction scenario for urgent public procurement, where the best eligible supplier is chosen against price, quantity, certification, budget, and delivery-time constraints.
 
@@ -85,31 +85,6 @@ pie showData
 - **MP4Box** for scroll-tied video support
 - **Tailwind CSS / PostCSS** alongside bespoke visual styling
 
-## 🚀 Run it locally
-
-**Prerequisite:** Node.js 18 or newer.
-
-```bash
-npm install
-npm run dev
-```
-
-Open the local address Vite prints in your browser. For a production build:
-
-```bash
-npm run build
-npm run preview
-```
-
-### Alternative: simple static server
-
-For the legacy static entry point, run:
-
-```powershell
-python server.py
-```
-
-Then visit [http://localhost:8080/index.html](http://localhost:8080/index.html).
 
 ## 🏛️ Production direction
 
