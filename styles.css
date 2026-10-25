@@ -3698,7 +3698,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 }
 
 /* ── 3. Shimmer Sweep Reflection on Cards ───────────── */
-
+@keyframes shimmerSweep {
+  0%   { transform: translateX(-150%) rotate(35deg); }
   35%  { transform: translateX(250%) rotate(35deg); }
   100% { transform: translateX(250%) rotate(35deg); }
 }
@@ -3904,7 +3905,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-
 }
 
 /* ── 4. Rotating Holographic Neon Border on Highlight Cards ── */
-
+@keyframes neonBorderRotate {
+  0%   { filter: hue-rotate(0deg); }
   100% { filter: hue-rotate(360deg); }
 }
 
