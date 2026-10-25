@@ -1,150 +1,156 @@
-# BIDEC | Real-Time Bidding & Auction System Under Load
+<div align="center">
 
-> **Problem Statement 02**: Architect a high-throughput transactional auction system ensuring valid bid serialization under heavy concurrent loads.
+# ⚡ SYNORA
 
----
+### A cinematic real-time auction experience, built to make concurrency visible.
 
-## 📌 Executive Summary
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=06121f)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Status](https://img.shields.io/badge/Status-Prototype-FF6B6B?style=for-the-badge)](#)
 
-High-concurrency financial trading and real-time auction platforms face extreme race conditions during peak traffic spikes (e.g. auction close with 5,000+ bids/sec). 
+**Live bidding · Load simulation · Audit ledger · Emergency procurement**
 
-A naive database approach (`SELECT ... UPDATE`) fails because concurrent transactions read stale price states, resulting in **lost updates**, **ghost bids**, and **out-of-order acceptances**. Conversely, naive row locking (`SELECT ... FOR UPDATE`) leads to **severe lock contention**, transaction queue backlog, connection pool exhaustion, and latency spikes.
-
-**BIDEC solves this using a decoupled High-Performance Architecture**:
-1. **Fast-Path In-Memory Atomic Sequencer** (Redis Lua script / LMAX Disruptor single-writer channel) that validates and assigns monotonic sequence IDs in $< 1\text{ms}$.
-2. **Asynchronous Write-Behind Persistence** (Transactional Outbox / PostgreSQL WAL) ensuring ACID persistence without blocking the real-time bid ingest path.
-3. **Decoupled Real-Time Broadcast Fabric** (Redis Pub/Sub -> WebSocket Gateway) pushing price delta events to thousands of connected clients in sub-50ms.
+</div>
 
 ---
 
-## 🎯 Mentor Evaluation Guidelines & How We Address Them
+## ✨ What is SYNORA?
 
-| Evaluation Requirement | Challenge Under Load | How SYNORA Solves & Proves It |
-| :--- | :--- | :--- |
-| **Zero Invalid / Out-of-Order Acceptances** | Concurrent bids with lower values overwrite higher bids during network/DB latency. | **Monotonic Sequence Enforcement**: Guarantees $Bid_{n} \ge Bid_{n-1} + MinIncrement$. The interactive lab tracks every transaction with microsecond resolution and asserts **0.000% Violations**. |
-| **Real-Time Delivery Latency** | WebSocket broadcasts delayed by slow DB transactions. | **Decoupled Fanout**: In-memory event publication yields an average broadcast latency of **$1\text{ms} - 5\text{ms}$** (P95 $< 15\text{ms}$), well within the 50ms mentor threshold. |
-| **Graceful Degradation Under Contention** | System crashes, deadlocks, or rejects all requests when traffic spikes to 5,000+ req/s. | **Lock-Free Event Queue**: Single-writer model rejects stale bids non-blockingly without database row locks or thread starvation. |
+SYNORA is an interactive front-end laboratory for exploring the difficult part of real-time auctions: accepting the right bid, in the right order, when everyone bids at once. It pairs a premium auction interface with live concurrency simulations, visual telemetry, and a transparent audit trail.
 
----
+It also includes **Relief Exchange** — a reverse-auction scenario for urgent public procurement, where the best eligible supplier is chosen against price, quantity, certification, budget, and delivery-time constraints.
 
-## 🔬 Interactive Demo Web Platform
+> **The idea:** real-time marketplaces should feel effortless to participants while remaining demonstrably fair under pressure.
 
-The repository includes a ready-to-run interactive web platform (**SYNORA Concurrency & Serialization Lab**) that lets mentors and developers test and compare concurrency strategies live:
+## 🌈 Highlights
 
-### 1. Live Auction Room
-- **Real-Time Price Ticker**: Live state synchronization with microsecond sequence tracking (`Seq #N`).
-- **Anti-Sniping Protocol**: Any valid bid submitted in the final 15 seconds extends the auction clock by +20 seconds.
-- **Manual Bidding & Quick Bids**: Instant UI testing with audio-visual feedback.
+| | Capability | What it lets you explore |
+|:--:|---|---|
+| ⚡ | **Atomic sequencing** | See how a single authoritative sequence prevents stale or out-of-order bid acceptance. |
+| 📈 | **Live telemetry** | Watch throughput, latency, acceptance, and violations change under simulated load. |
+| 🧪 | **Strategy lab** | Compare naive, pessimistic locking, optimistic CAS, and in-memory sequencer approaches. |
+| 🛡️ | **Audit-first design** | Follow every decision through a timestamped transaction ledger. |
+| 🚑 | **Relief Exchange** | Model transparent reverse auctions for time-critical emergency supplies. |
+| ⏱️ | **Anti-sniping rules** | Extend an auction when valid late bids arrive. |
 
-### 2. Multi-Strategy Concurrency Comparison
-You can toggle between 4 concurrency engines in real time:
-1. **⚠️ Naive (Unsynchronized)**: Demonstrates the actual flaw—concurrent bids overwrite each other, producing **Invalid Bid Acceptances (Violations)** highlighted in red.
-2. **🔒 Pessimistic Locking**: Simulates `SELECT FOR UPDATE`. Eliminates violations but causes latency to climb from 2ms to 100ms+ due to lock queue contention.
-3. **🔄 Optimistic CAS**: Simulates version checks (`UPDATE ... WHERE version = v`). Shows high CAS conflict abort rates under single-row hot spots.
-4. **⚡ In-Memory Atomic Sequencer**: Simulates the Redis Lua / LMAX single-writer pattern. **Zero violations, sub-millisecond execution, peak throughput $> 5,000\text{ req/s}$**.
+## 🧠 Concurrency strategies at a glance
 
-### 3. Built-in Stress Test Generator
-- Simulate bursts of **500, 1,000, 2,500, or 5,000 concurrent bids** across 25 to 500 Virtual Users (VUs).
-- Continuous load testing option generating 1,500+ sustained transactions/second.
-- Real-time Canvas telemetry graph plotting Throughput (TPS) and Mean Latency (ms).
-- Microsecond-precision Transaction Audit Ledger.
+```mermaid
+flowchart LR
+    B[Incoming bids] --> N[Naive updates]
+    B --> L[Pessimistic locking]
+    B --> C[Optimistic CAS]
+    B --> S[Atomic sequencer]
+    N -->|Fast, but may violate order| X[Result]
+    L -->|Correct, but queues under load| X
+    C -->|Correct, retries on conflict| X
+    S -->|Ordered and low-latency| X
 
-### 4. 🚑 Relief Exchange — Emergency Procurement Mode (Reverse Auction)
-- **Public Impact Reverse Auction**: Public hospitals and emergency relief bodies procure critical supplies (e.g. 500 medical-grade oxygen cylinders within 4 hours under a ₹12,00,000 budget cap).
-- **Multi-Constraint Eligibility Verification**: Unlike standard auctions where lowest price blindly wins, Relief Exchange enforces mandatory compliance across quantity ($\ge 500$), delivery deadline ($\le 4\text{h}$), medical certification, and budget ceiling.
-- **Deterministic Atomic Tie-Breaker**: When multiple compliant suppliers offer identical pricing, the authoritative monotonic sequence number guarantees transparent, auditable selection without discretion.
-- **5,000 Emergency Offer Surge**: Stress-tests reverse auction selection under disaster/pandemic peak surge, logging all `OFFER_RECEIVED`, `OFFER_ELIGIBLE`, `OFFER_REJECTED`, and `CONTRACT_AWARDED` events into the immutable audit ledger.
+    classDef risk fill:#ffebe9,stroke:#f04438,color:#7a271a
+    classDef warn fill:#fff6e0,stroke:#f79009,color:#7a2e0e
+    classDef good fill:#e7f8ef,stroke:#12b76a,color:#054f31
+    class N risk
+    class L,C warn
+    class S good
+```
 
----
+## 🗂️ Language mix
 
-## 🚀 How to Run the Demo
+The chart below is calculated from first-party source files in this repository (by file size; dependencies and build output excluded).
 
-### Option 1: Direct Browser Launch (Zero Dependencies)
-Simply double-click or open `index.html` in Google Chrome, Microsoft Edge, or Firefox.
+```mermaid
+pie showData
+    title Source language distribution
+    "JavaScript / JSX" : 70
+    "CSS" : 24
+    "TypeScript / TSX" : 5
+    "Python & HTML" : 1
+```
 
-### Option 2: Python Web Server
-If you have Python installed:
+<div align="center">
+
+| JavaScript / JSX | CSS | TypeScript / TSX | Python & HTML |
+|:---:|:---:|:---:|:---:|
+| `70%` | `24%` | `5%` | `1%` |
+
+</div>
+
+## 🧰 Built with
+
+- **React 18** for the interactive experience
+- **Vite 5** for fast local development and production builds
+- **TypeScript** for the application shell and utilities
+- **Lucide React** for crisp UI iconography
+- **MP4Box** for scroll-tied video support
+- **Tailwind CSS / PostCSS** alongside bespoke visual styling
+
+## 🚀 Run it locally
+
+**Prerequisite:** Node.js 18 or newer.
+
+```bash
+npm install
+npm run dev
+```
+
+Open the local address Vite prints in your browser. For a production build:
+
+```bash
+npm run build
+npm run preview
+```
+
+### Alternative: simple static server
+
+For the legacy static entry point, run:
+
 ```powershell
 python server.py
 ```
-This starts a local server on port 8080 and automatically opens the dashboard in your default browser:
-`http://localhost:8080/index.html`
+
+Then visit [http://localhost:8080/index.html](http://localhost:8080/index.html).
+
+## 🏛️ Production direction
+
+The demo illustrates a production architecture with a fast, ordered ingest path and asynchronous durability:
+
+```mermaid
+flowchart LR
+    U[Bidder] --> G[API / WebSocket gateway]
+    G --> R[Redis Lua atomic sequencer]
+    R --> P[Pub/Sub fan-out]
+    R --> O[Transactional outbox]
+    O --> D[(PostgreSQL ledger)]
+    P --> W[Connected clients]
+
+    classDef primary fill:#eef4ff,stroke:#2e90fa,color:#0b4a6f
+    classDef accent fill:#f4ebff,stroke:#9e77ed,color:#3e1c96
+    class R primary
+    class P,O accent
+```
+
+The intended invariants are simple and strict:
+
+1. A valid bid must exceed the current high bid by the required increment.
+2. Every accepted bid receives a monotonic sequence number.
+3. The sequence is authoritative, even if persistence and broadcast complete later.
+4. The audit ledger makes the decision trail inspectable.
+
+## 🛣️ Roadmap
+
+- [x] Interactive auction and strategy comparison UI
+- [x] Stress-test simulation, telemetry, and audit ledger
+- [x] Relief Exchange reverse-auction scenario
+- [ ] Connect the sequencer to Redis Lua in a backend service
+- [ ] Add PostgreSQL write-behind and transactional outbox
+- [ ] Add real WebSocket fan-out and reconciliation
+- [ ] Validate with automated multi-region load tests
 
 ---
 
-## 🛠️ Production Architecture & Code Patterns
+<div align="center">
 
-### 1. Redis Atomic Lua Script (Fast-Path Sequencer)
-In production, the atomic sequencer is executed on a single Redis key per auction:
+Built for fairer, faster, more transparent real-time markets. ✦
 
-```lua
--- KEYS[1]: auction:{id}
--- ARGV[1]: bidder_id, ARGV[2]: bid_amount, ARGV[3]: min_increment, ARGV[4]: timestamp
-
-local current_high = tonumber(redis.call('HGET', KEYS[1], 'highest_bid') or '0')
-local bid_amount = tonumber(ARGV[2])
-local min_inc = tonumber(ARGV[3])
-
-if bid_amount < (current_high + min_inc) then
-    return {0, "ERR_BID_TOO_LOW", current_high}
-end
-
--- Atomic update
-local seq = redis.call('HINCRBY', KEYS[1], 'sequence', 1)
-redis.call('HMSET', KEYS[1], 'highest_bid', bid_amount, 'highest_bidder', ARGV[1], 'last_bid_time', ARGV[4])
-
--- Publish update to Pub/Sub channel for WebSocket fanout
-local payload = cjson.encode({
-    auction_id = KEYS[1],
-    seq = seq,
-    bidder = ARGV[1],
-    amount = bid_amount,
-    ts = ARGV[4]
-})
-redis.call('PUBLISH', 'auction_events', payload)
-
-return {1, seq, bid_amount}
-```
-
-### 2. PostgreSQL Outbox / Write-Behind Schema
-```sql
-CREATE TABLE auctions (
-    auction_id UUID PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    current_high_bid NUMERIC(15, 2) NOT NULL DEFAULT 0,
-    highest_bidder_id UUID,
-    version BIGINT NOT NULL DEFAULT 0,
-    closing_at TIMESTAMPTZ NOT NULL,
-    is_settled BOOLEAN NOT NULL DEFAULT FALSE
-);
-
-CREATE TABLE bid_ledger (
-    bid_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    auction_id UUID NOT NULL REFERENCES auctions(auction_id),
-    sequence_number BIGINT NOT NULL,
-    bidder_id UUID NOT NULL,
-    bid_amount NUMERIC(15, 2) NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp(),
-    status VARCHAR(20) NOT NULL,
-    CONSTRAINT unique_auction_seq UNIQUE (auction_id, sequence_number)
-);
-
-CREATE INDEX idx_bid_ledger_auction_seq ON bid_ledger (auction_id, sequence_number DESC);
-```
-
----
-
-## 🗺️ Phased Development Roadmap
-
-```
-[Phase 1: In-Memory Engine] ──> [Phase 2: Persistent Storage] ──> [Phase 3: WebSocket PubSub] ──> [Phase 4: Load Testing] ──> [Phase 5: HA & Clustering]
-  - State Machine                - Transactional Outbox            - Redis Pub/Sub                 - k6 Distributed Runner       - Redis Cluster
-  - Atomic CAS / Lua             - Postgres Write-Behind           - Sequence Reconciliation       - Chaos & Latency Profiling   - Partitioned Sharding
-  - Anti-Sniping Timer           - Idempotency Deduplication       - Client Delta Patches          - Mentor Audit Report         - Multi-Region Failover
-```
-
-1. **Phase 1 (Days 1–3)**: Build the in-memory state sequencer and linearizable bid validator.
-2. **Phase 2 (Days 4–6)**: Add PostgreSQL ledger with transactional outbox and unique sequence constraints.
-3. **Phase 3 (Days 7–8)**: Deploy high-fanout WebSocket cluster using Redis Pub/Sub with delta packets.
-4. **Phase 4 (Days 9–10)**: Execute automated k6 stress tests verifying 0 violations at 5,000 req/s.
-5. **Phase 5**: Implement multi-region edge gateways and distributed consensus.
+</div>
